@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,10 +13,11 @@ namespace CSP_MapColoring
 {
     public partial class Domains : Form
     {
+        int len = 15;
         public Domains()
         {
             InitializeComponent();
-            checkedListBox1.Items.AddRange(new object[]{
+            clbDomains.Items.AddRange(new object[]{
                 Color.AliceBlue,
                 Color.Aqua,
                 Color.BlueViolet,
@@ -31,7 +33,19 @@ namespace CSP_MapColoring
                 Color.Silver,
                 Color.SeaGreen,
                 Color.Salmon,
-            });
+            });          
+        }
+
+        public void retItems(ref ArrayList list)
+        {
+            for (int i = 0; i < len; i++)
+                if (clbDomains.GetItemCheckState(i) == CheckState.Checked)
+                    list.Add((Color)clbDomains.Items[i]);
+        }
+
+        private void btnOk_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

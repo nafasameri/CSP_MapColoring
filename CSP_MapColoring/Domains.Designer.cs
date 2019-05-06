@@ -28,33 +28,47 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
+            this.clbDomains = new System.Windows.Forms.CheckedListBox();
+            this.btnOk = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // checkedListBox1
+            // clbDomains
             // 
-            this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Location = new System.Drawing.Point(2, 3);
-            this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(250, 403);
-            this.checkedListBox1.TabIndex = 1;
+            this.clbDomains.CheckOnClick = true;
+            this.clbDomains.FormattingEnabled = true;
+            this.clbDomains.Location = new System.Drawing.Point(2, 3);
+            this.clbDomains.Name = "clbDomains";
+            this.clbDomains.Size = new System.Drawing.Size(250, 319);
+            this.clbDomains.TabIndex = 1;
+            // 
+            // btnOk
+            // 
+            this.btnOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnOk.Location = new System.Drawing.Point(149, 328);
+            this.btnOk.Name = "btnOk";
+            this.btnOk.Size = new System.Drawing.Size(92, 37);
+            this.btnOk.TabIndex = 2;
+            this.btnOk.Text = "Ok";
+            this.btnOk.UseVisualStyleBackColor = true;
+            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
             // Domains
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(253, 440);
-            this.Controls.Add(this.checkedListBox1);
+            this.ClientSize = new System.Drawing.Size(253, 371);
+            this.Controls.Add(this.btnOk);
+            this.Controls.Add(this.clbDomains);
             this.Font = new System.Drawing.Font("Comic Sans MS", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Domains";
             this.Text = "Domains";
             this.ResumeLayout(false);
-
         }
 
         #endregion
 
-        private System.Windows.Forms.CheckedListBox checkedListBox1;
+        private System.Windows.Forms.CheckedListBox clbDomains;
+        private System.Windows.Forms.Button btnOk;
     }
 }

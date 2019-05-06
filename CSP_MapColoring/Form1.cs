@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,15 +17,12 @@ namespace CSP_MapColoring
         Dictionary<int, Point> Vertices = new Dictionary<int, Point>();
         bool[,] State;
         Graphics g;
-        
+        ArrayList colors = new ArrayList();
+        Domains frmDomains = new Domains();
+
         public Main()
         {
             InitializeComponent();
-            SetLocationVertices();
-            State = new bool[NumOfVertices, NumOfVertices];
-            for (int i = 0; i < NumOfVertices; i++)
-                for (int j = 0; j < NumOfVertices; j++)
-                    State[i, j] = false;
         }
 
         #region Drag And Drop
@@ -68,6 +66,7 @@ namespace CSP_MapColoring
         }
         #endregion
 
+        #region Draw
         private void SetLocationVertices()
         {
             Point[] points = new Point[15];
@@ -109,22 +108,36 @@ namespace CSP_MapColoring
                 g.DrawString(item.Key.ToString(), new Font(FontFamily.GenericSansSerif, 15), new SolidBrush(Color.DarkViolet), item.Value);
             }
         }
+        #endregion
 
         #region Controls
         private void btnDomains_Click(object sender, EventArgs e)
         {
-            Domains frmDomains = new Domains();
             frmDomains.Show();
+            frmDomains.FormClosing += FrmDomains_FormClosing;
+        }
+
+        private void FrmDomains_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            frmDomains.retItems(ref colors);
         }
 
         private void btnOk_Click(object sender, EventArgs e)
         {
+            SetLocationVertices();
+            State = new bool[NumOfVertices, NumOfVertices];
+            for (int i = 0; i < NumOfVertices; i++)
+                for (int j = 0; j < NumOfVertices; j++)
+                    State[i, j] = false;
             int.TryParse(txtNumOfVertices.Text, out NumOfVertices);
             for (int i = 0; i < NumOfVertices; i++)
             {
                 cmbFromVertices.Items.AddRange(new object[] { i });
                 cmbToVertices.Items.AddRange(new object[] { i });
             }
+            grbNumOfVertices.Enabled = false;
+            grbEdges.Enabled = true;
+            grbSelectVar_Val.Enabled = false;
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -132,6 +145,22 @@ namespace CSP_MapColoring
             DialogResult result = MessageBox.Show("Do you want exit this program?", "Exit!", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
             if (result == DialogResult.Yes)
                 Application.Exit();
+        }
+
+        private void btnOKEdge_Click(object sender, EventArgs e)
+        {
+            State[cmbFromVertices.SelectedIndex, cmbToVertices.SelectedIndex] = true;
+            State[cmbToVertices.SelectedIndex, cmbFromVertices.SelectedIndex] = true;
+            grbNumOfVertices.Enabled = false;
+            grbEdges.Enabled = true;
+            grbSelectVar_Val.Enabled = true;
+        }
+
+        private void btnBackTracking_Click(object sender, EventArgs e)
+        {
+            if (clbVar_Val.GetItemChecked(0)) Heuristics.MRV();
+            if (clbVar_Val.GetItemChecked(1)) ;//Heuristics.MostDegree(State);
+            if (clbVar_Val.GetItemChecked(2)) Heuristics.LCV();
         }
         #endregion
     }
