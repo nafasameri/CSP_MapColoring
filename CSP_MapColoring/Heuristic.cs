@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace CSP_MapColoring
 {
-    class BackTracking
+    class Heuristic
     {
-        public static void BT()
-        {
 
-        }
     }
 }

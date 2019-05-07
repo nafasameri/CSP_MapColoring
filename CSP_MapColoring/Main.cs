@@ -14,7 +14,7 @@ namespace CSP_MapColoring
     public partial class Main : Form
     {
         private int NumOfVertices;
-        Dictionary<int, Point> Vertices = new Dictionary<int, Point>();
+        Dictionary<int, Node> Vertices = new Dictionary<int, Node>();
         bool[,] State;
         Graphics g;
         ArrayList colors = new ArrayList();
@@ -33,9 +33,9 @@ namespace CSP_MapColoring
         {
             foreach (var p in Vertices)
             {
-                if (p.Value.X + 10 >= e.X && p.Value.X - 10 <= e.X)
+                if (p.Value.point.X + 10 >= e.X && p.Value.point.X - 10 <= e.X)
                 {
-                    if (p.Value.Y + 10 >= e.Y && p.Value.Y - 10 <= e.Y)
+                    if (p.Value.point.Y + 10 >= e.Y && p.Value.point.Y - 10 <= e.Y)
                     {
                         Cursor = Cursors.SizeAll;
                         draging = true;
@@ -57,17 +57,17 @@ namespace CSP_MapColoring
         {
             if (draging)
             {
-                dragingPoint = Vertices[dragingPointIndex];
+                dragingPoint = Vertices[dragingPointIndex].point;
                 dragingPoint.X = e.X;
                 dragingPoint.Y = e.Y;
-                Vertices[dragingPointIndex] = dragingPoint;
-                Draw(Color.AliceBlue);
+                Vertices[dragingPointIndex].point = dragingPoint;
+                Draw();
             }
         }
         #endregion
 
         #region Draw
-        private void SetLocationVertices()
+        private Point[] SetLocationVertices()
         {
             Point[] points = new Point[15];
             points[0] = new Point(380, 30);
@@ -85,13 +85,10 @@ namespace CSP_MapColoring
             points[12] = new Point(400, 350);
             points[13] = new Point(280, 420);
             points[14] = new Point(280, 255);
-
-            /// Creat Vertices      
-            for (int i = 0; i < NumOfVertices; i++)
-                try { Vertices.Add(i, points[i]); } catch { }
+            return points;
         }
 
-        private void Draw(Color color)
+        private void Draw()
         {
             g = pnlResult.CreateGraphics();
             g.Clear(pnlResult.BackColor);
@@ -100,13 +97,18 @@ namespace CSP_MapColoring
             for (int i = 0; i < NumOfVertices; i++)
                 for (int j = 0; j < NumOfVertices; j++)
                     if (State[i, j])
-                        g.DrawLine(new Pen(Color.DarkOrchid), Vertices[i], Vertices[j]);
+                        g.DrawLine(new Pen(Color.DarkOrchid), Vertices[i].point, Vertices[j].point);
             /// draw nodes and indexs
             foreach (var item in Vertices)
             {
-                g.FillEllipse(new SolidBrush(color), item.Value.X - 10, item.Value.Y - 10, 20, 20);
-                g.DrawString(item.Key.ToString(), new Font(FontFamily.GenericSansSerif, 15), new SolidBrush(Color.DarkViolet), item.Value);
+                g.FillEllipse(new SolidBrush(Color.WhiteSmoke), item.Value.point.X - 10, item.Value.point.Y - 10, 20, 20);
+                g.DrawString(item.Key.ToString(), new Font(FontFamily.GenericSansSerif, 15), new SolidBrush(Color.DarkViolet), new Point(item.Value.point.X - 10, item.Value.point.Y - 10));
             }
+        }
+
+        private void Draw_(Color color, Point Vertice)
+        {
+            g.FillEllipse(new SolidBrush(color), Vertice.X - 10, Vertice.Y - 10, 20, 20);
         }
         #endregion
 
@@ -124,7 +126,7 @@ namespace CSP_MapColoring
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            SetLocationVertices();
+            Point[] points = SetLocationVertices();
             State = new bool[NumOfVertices, NumOfVertices];
             for (int i = 0; i < NumOfVertices; i++)
                 for (int j = 0; j < NumOfVertices; j++)
@@ -134,6 +136,9 @@ namespace CSP_MapColoring
             {
                 cmbFromVertices.Items.AddRange(new object[] { i });
                 cmbToVertices.Items.AddRange(new object[] { i });
+                Vertices.Add(i, new Node());
+                Vertices[i].Name = i.ToString();
+                Vertices[i].point = points[i];
             }
             grbNumOfVertices.Enabled = false;
             grbEdges.Enabled = true;
@@ -149,8 +154,7 @@ namespace CSP_MapColoring
 
         private void btnOKEdge_Click(object sender, EventArgs e)
         {
-            State[cmbFromVertices.SelectedIndex, cmbToVertices.SelectedIndex] = true;
-            State[cmbToVertices.SelectedIndex, cmbFromVertices.SelectedIndex] = true;
+            State[cmbFromVertices.SelectedIndex, cmbToVertices.SelectedIndex] = State[cmbToVertices.SelectedIndex, cmbFromVertices.SelectedIndex] = true;
             grbNumOfVertices.Enabled = false;
             grbEdges.Enabled = true;
             grbSelectVar_Val.Enabled = true;
@@ -158,9 +162,9 @@ namespace CSP_MapColoring
 
         private void btnBackTracking_Click(object sender, EventArgs e)
         {
-            if (clbVar_Val.GetItemChecked(0)) Heuristics.MRV();
-            if (clbVar_Val.GetItemChecked(1)) ;//Heuristics.MostDegree(State);
-            if (clbVar_Val.GetItemChecked(2)) Heuristics.LCV();
+            //if (clbVar_Val.GetItemChecked(0)) Heuristics.MRV();
+            //if (clbVar_Val.GetItemChecked(1)) Heuristics.MostDegree(State);
+            //if (clbVar_Val.GetItemChecked(2)) Heuristics.LCV();
         }
         #endregion
     }
