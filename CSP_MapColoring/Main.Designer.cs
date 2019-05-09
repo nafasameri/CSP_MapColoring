@@ -91,9 +91,9 @@
             this.grbEdges.Controls.Add(this.cmbToVertices);
             this.grbEdges.Controls.Add(this.cmbFromVertices);
             this.grbEdges.Enabled = false;
-            this.grbEdges.Location = new System.Drawing.Point(11, 190);
+            this.grbEdges.Location = new System.Drawing.Point(8, 196);
             this.grbEdges.Name = "grbEdges";
-            this.grbEdges.Size = new System.Drawing.Size(221, 174);
+            this.grbEdges.Size = new System.Drawing.Size(224, 174);
             this.grbEdges.TabIndex = 2;
             this.grbEdges.TabStop = false;
             this.grbEdges.Text = "Edges";
@@ -104,7 +104,7 @@
             this.btnOKEdge.Location = new System.Drawing.Point(52, 122);
             this.btnOKEdge.Name = "btnOKEdge";
             this.btnOKEdge.Size = new System.Drawing.Size(92, 37);
-            this.btnOKEdge.TabIndex = 10;
+            this.btnOKEdge.TabIndex = 2;
             this.btnOKEdge.Text = "Ok";
             this.btnOKEdge.UseVisualStyleBackColor = true;
             this.btnOKEdge.Click += new System.EventHandler(this.btnOKEdge_Click);
@@ -134,7 +134,7 @@
             this.cmbToVertices.Location = new System.Drawing.Point(75, 78);
             this.cmbToVertices.Name = "cmbToVertices";
             this.cmbToVertices.Size = new System.Drawing.Size(121, 26);
-            this.cmbToVertices.TabIndex = 7;
+            this.cmbToVertices.TabIndex = 1;
             // 
             // cmbFromVertices
             // 
@@ -143,7 +143,7 @@
             this.cmbFromVertices.Location = new System.Drawing.Point(75, 46);
             this.cmbFromVertices.Name = "cmbFromVertices";
             this.cmbFromVertices.Size = new System.Drawing.Size(121, 26);
-            this.cmbFromVertices.TabIndex = 6;
+            this.cmbFromVertices.TabIndex = 0;
             // 
             // grbSelectVar_Val
             // 
@@ -167,7 +167,7 @@
             this.clbVar_Val.Location = new System.Drawing.Point(3, 28);
             this.clbVar_Val.Name = "clbVar_Val";
             this.clbVar_Val.Size = new System.Drawing.Size(218, 88);
-            this.clbVar_Val.TabIndex = 1;
+            this.clbVar_Val.TabIndex = 0;
             // 
             // grbNumOfVertices
             // 
@@ -175,7 +175,7 @@
             this.grbNumOfVertices.Controls.Add(this.txtNumOfVertices);
             this.grbNumOfVertices.Location = new System.Drawing.Point(8, 7);
             this.grbNumOfVertices.Name = "grbNumOfVertices";
-            this.grbNumOfVertices.Size = new System.Drawing.Size(221, 166);
+            this.grbNumOfVertices.Size = new System.Drawing.Size(224, 166);
             this.grbNumOfVertices.TabIndex = 6;
             this.grbNumOfVertices.TabStop = false;
             this.grbNumOfVertices.Text = "Vertices";
@@ -196,7 +196,7 @@
             this.txtNumOfVertices.Location = new System.Drawing.Point(36, 45);
             this.txtNumOfVertices.Name = "txtNumOfVertices";
             this.txtNumOfVertices.Size = new System.Drawing.Size(131, 26);
-            this.txtNumOfVertices.TabIndex = 2;
+            this.txtNumOfVertices.TabIndex = 0;
             // 
             // tabResult
             // 
@@ -217,7 +217,7 @@
             this.pnlResult.BackColor = System.Drawing.Color.White;
             this.pnlResult.Location = new System.Drawing.Point(8, 8);
             this.pnlResult.Name = "pnlResult";
-            this.pnlResult.Size = new System.Drawing.Size(729, 511);
+            this.pnlResult.Size = new System.Drawing.Size(652, 511);
             this.pnlResult.TabIndex = 2;
             this.pnlResult.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mouseDown);
             this.pnlResult.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mouseMove);
@@ -226,7 +226,7 @@
             // lblLog
             // 
             this.lblLog.AutoSize = true;
-            this.lblLog.Location = new System.Drawing.Point(740, 4);
+            this.lblLog.Location = new System.Drawing.Point(666, 4);
             this.lblLog.Name = "lblLog";
             this.lblLog.Size = new System.Drawing.Size(33, 18);
             this.lblLog.TabIndex = 1;
@@ -234,9 +234,9 @@
             // 
             // rtbLog
             // 
-            this.rtbLog.Location = new System.Drawing.Point(743, 25);
+            this.rtbLog.Location = new System.Drawing.Point(666, 25);
             this.rtbLog.Name = "rtbLog";
-            this.rtbLog.Size = new System.Drawing.Size(211, 494);
+            this.rtbLog.Size = new System.Drawing.Size(297, 494);
             this.rtbLog.TabIndex = 0;
             this.rtbLog.Text = "";
             // 
@@ -253,25 +253,26 @@
             // 
             // btnExit
             // 
+            this.btnExit.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExit.Location = new System.Drawing.Point(884, 564);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(83, 43);
-            this.btnExit.TabIndex = 1;
+            this.btnExit.TabIndex = 5;
             this.btnExit.Text = "Exit";
             this.btnExit.UseVisualStyleBackColor = true;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // btnBackTracking
             // 
+            this.btnBackTracking.Enabled = false;
             this.btnBackTracking.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBackTracking.Location = new System.Drawing.Point(4, 564);
             this.btnBackTracking.Name = "btnBackTracking";
             this.btnBackTracking.Size = new System.Drawing.Size(110, 43);
-            this.btnBackTracking.TabIndex = 4;
+            this.btnBackTracking.TabIndex = 3;
             this.btnBackTracking.Text = "BackTracking";
             this.btnBackTracking.UseVisualStyleBackColor = true;
-            this.btnBackTracking.Click += new System.EventHandler(this.btnBackTracking_Click);
             // 
             // btnForwardChecking
             // 
@@ -279,24 +280,28 @@
             this.btnForwardChecking.Location = new System.Drawing.Point(120, 564);
             this.btnForwardChecking.Name = "btnForwardChecking";
             this.btnForwardChecking.Size = new System.Drawing.Size(151, 43);
-            this.btnForwardChecking.TabIndex = 6;
+            this.btnForwardChecking.TabIndex = 1;
             this.btnForwardChecking.Text = "BT+ForwardChecking";
             this.btnForwardChecking.UseVisualStyleBackColor = true;
+            this.btnForwardChecking.Click += new System.EventHandler(this.btnForwardChecking_Click);
             // 
             // btnArcConsistency
             // 
+            this.btnArcConsistency.Enabled = false;
             this.btnArcConsistency.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnArcConsistency.Location = new System.Drawing.Point(277, 564);
             this.btnArcConsistency.Name = "btnArcConsistency";
             this.btnArcConsistency.Size = new System.Drawing.Size(151, 43);
-            this.btnArcConsistency.TabIndex = 6;
+            this.btnArcConsistency.TabIndex = 4;
             this.btnArcConsistency.Text = "BT+Arc Consistency";
             this.btnArcConsistency.UseVisualStyleBackColor = true;
             // 
             // Main
             // 
+            this.AcceptButton = this.btnForwardChecking;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(979, 614);
             this.Controls.Add(this.btnArcConsistency);
             this.Controls.Add(this.btnForwardChecking);
@@ -304,7 +309,9 @@
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnDomains);
             this.Controls.Add(this.tabControl);
+            this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Comic Sans MS", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Main";
             this.Text = "CSP solver";

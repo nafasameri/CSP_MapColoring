@@ -19,11 +19,26 @@ namespace CSP_MapColoring
         Graphics g;
         ArrayList colors = new ArrayList();
         Domains frmDomains = new Domains();
+        Dictionary<int, List<int>> Neighbors = new Dictionary<int, List<int>>();
 
+        #region Method's
         public Main()
         {
             InitializeComponent();
         }
+
+        private void Neighbor()
+        {
+            for (int i = 0; i < NumOfVertices; i++)
+            {
+                List<int> temp = new List<int>();
+                for (int j = 0; j < NumOfVertices; j++)
+                    if (State[i, j])
+                        temp.Add(j);
+                Neighbors.Add(i, temp);
+            }
+        }
+        #endregion
 
         #region Drag And Drop
         private bool draging = false;
@@ -101,8 +116,8 @@ namespace CSP_MapColoring
             /// draw nodes and indexs
             foreach (var item in Vertices)
             {
-                g.FillEllipse(new SolidBrush(Color.WhiteSmoke), item.Value.point.X - 10, item.Value.point.Y - 10, 20, 20);
-                g.DrawString(item.Key.ToString(), new Font(FontFamily.GenericSansSerif, 12), new SolidBrush(Color.DarkViolet), new Point(item.Value.point.X - 10, item.Value.point.Y - 10));
+                g.FillEllipse(new SolidBrush(item.Value.color), item.Value.point.X - 10, item.Value.point.Y - 10, 20, 20);
+                g.DrawString(item.Key.ToString(), this.Font, new SolidBrush(Color.Black), new Point(item.Value.point.X - 10, item.Value.point.Y - 10));
             }
         }
 
@@ -124,9 +139,7 @@ namespace CSP_MapColoring
         {
             frmDomains.retItems(ref colors);
             foreach (var item in Vertices)
-            {
                 item.Value.domain = colors;
-            }
         }
 
         private void btnOk_Click(object sender, EventArgs e)
@@ -144,6 +157,7 @@ namespace CSP_MapColoring
                 Vertices.Add(i, new Node());
                 Vertices[i].Name = i.ToString();
                 Vertices[i].point = points[i];
+                Vertices[i].color = Color.Snow;
             }
             grbNumOfVertices.Enabled = false;
             grbEdges.Enabled = true;
@@ -165,15 +179,29 @@ namespace CSP_MapColoring
             grbSelectVar_Val.Enabled = true;
         }
 
-        private void btnBackTracking_Click(object sender, EventArgs e)
+        private void btnForwardChecking_Click(object sender, EventArgs e)
         {
-            //Heuristic.Color()
-            //Draw();
-            //Draw_(Color.BlueViolet, Vertices[4]);
-            //Draw_(Color.CornflowerBlue, Vertices[8]);
-            //Draw_(Color.BlanchedAlmond, Vertices[9]);
+            if (clbVar_Val.GetItemChecked(0) && clbVar_Val.GetItemChecked(1) && clbVar_Val.GetItemChecked(2))
+            {
+                rtbLog.Text += "Begin Of Solving CSP.\r\n";
+                Neighbor();
+                Heuristic.Graph = Vertices;
+
+                for (int i = 0; i < NumOfVertices; i++)
+                    Vertices[i].Neighbors = Neighbors[i];
+                string log = string.Empty;
+                Heuristic.Color(colors, ref log);
+
+                rtbLog.Text += log;
+                for (int i = 0; i < NumOfVertices; i++)
+                    Vertices[i].color = (Color)Heuristic.ColoredMap[i];
+                Draw();
+
+                //if (colors.Count < Vertices.Count){rtbLog.Text = "CSP not be Solve!";return;}else
+                rtbLog.Text += "End Of Solving CSP.\r\n";
+            }
             //if (clbVar_Val.GetItemChecked(0)) Heuristics.MRV();
-            //if (clbVar_Val.GetItemChecked(1)) Heuristics.MostDegree(State);
+            //if (clbVar_Val.GetItemChecked(1)) Heuristics.MostDegree();
             //if (clbVar_Val.GetItemChecked(2)) Heuristics.LCV();
         }
         #endregion

@@ -25,18 +25,16 @@ namespace CSP_MapColoring
             Color.Teal,
             Color.Thistle,
             Color.Tan,
-            Color.Snow,
+            Color.Lavender,
             Color.SlateBlue,
             Color.Silver,
             Color.SeaGreen,
             Color.Salmon
         };
 
-
         public Domains()
         {
             InitializeComponent();
-            clbDomains.Items.AddRange(obj);          
         }
 
         public void retItems(ref ArrayList list)
@@ -49,6 +47,15 @@ namespace CSP_MapColoring
         private void btnOk_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void Domains_Load(object sender, EventArgs e)
+        {
+            clbDomains.Items.AddRange(obj);
+            Graphics g = textBox1.CreateGraphics();
+            int t = 0;
+            for (int i = 0; i < obj.Length; i++)
+                g.FillEllipse(new SolidBrush((Color)obj[i]), 8, (t++ * 20) + 4, 20, 20);
         }
     }
 }
