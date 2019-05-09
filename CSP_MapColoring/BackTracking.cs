@@ -12,5 +12,10 @@ namespace CSP_MapColoring
         {
 
         }
+
+        public static void DFS()
+        {
+            
+        }
     }
 }

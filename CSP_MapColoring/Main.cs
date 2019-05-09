@@ -102,13 +102,14 @@ namespace CSP_MapColoring
             foreach (var item in Vertices)
             {
                 g.FillEllipse(new SolidBrush(Color.WhiteSmoke), item.Value.point.X - 10, item.Value.point.Y - 10, 20, 20);
-                g.DrawString(item.Key.ToString(), new Font(FontFamily.GenericSansSerif, 15), new SolidBrush(Color.DarkViolet), new Point(item.Value.point.X - 10, item.Value.point.Y - 10));
+                g.DrawString(item.Key.ToString(), new Font(FontFamily.GenericSansSerif, 12), new SolidBrush(Color.DarkViolet), new Point(item.Value.point.X - 10, item.Value.point.Y - 10));
             }
         }
 
-        private void Draw_(Color color, Point Vertice)
+        private void Draw_(Color color, Node Vertice)
         {
-            g.FillEllipse(new SolidBrush(color), Vertice.X - 10, Vertice.Y - 10, 20, 20);
+            g.FillEllipse(new SolidBrush(color), Vertice.point.X - 10, Vertice.point.Y - 10, 20, 20);
+            g.DrawString(Vertice.Name, new Font(FontFamily.GenericSansSerif, 12), new SolidBrush(Color.DarkViolet), new Point(Vertice.point.X - 10, Vertice.point.Y - 10));
         }
         #endregion
 
@@ -122,16 +123,20 @@ namespace CSP_MapColoring
         private void FrmDomains_FormClosing(object sender, FormClosingEventArgs e)
         {
             frmDomains.retItems(ref colors);
+            foreach (var item in Vertices)
+            {
+                item.Value.domain = colors;
+            }
         }
 
         private void btnOk_Click(object sender, EventArgs e)
         {
+            int.TryParse(txtNumOfVertices.Text, out NumOfVertices);
             Point[] points = SetLocationVertices();
             State = new bool[NumOfVertices, NumOfVertices];
             for (int i = 0; i < NumOfVertices; i++)
                 for (int j = 0; j < NumOfVertices; j++)
                     State[i, j] = false;
-            int.TryParse(txtNumOfVertices.Text, out NumOfVertices);
             for (int i = 0; i < NumOfVertices; i++)
             {
                 cmbFromVertices.Items.AddRange(new object[] { i });
@@ -162,6 +167,11 @@ namespace CSP_MapColoring
 
         private void btnBackTracking_Click(object sender, EventArgs e)
         {
+            //Heuristic.Color()
+            //Draw();
+            //Draw_(Color.BlueViolet, Vertices[4]);
+            //Draw_(Color.CornflowerBlue, Vertices[8]);
+            //Draw_(Color.BlanchedAlmond, Vertices[9]);
             //if (clbVar_Val.GetItemChecked(0)) Heuristics.MRV();
             //if (clbVar_Val.GetItemChecked(1)) Heuristics.MostDegree(State);
             //if (clbVar_Val.GetItemChecked(2)) Heuristics.LCV();

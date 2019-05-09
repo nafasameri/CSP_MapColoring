@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace CSP_MapColoring
         public string Name { get; set; }
         public List<Node> Neighbor = new List<Node>();
         public Color color { get; set; }
-        public List<string> domain = new List<string>();
+        public ArrayList domain = new ArrayList();
         public Point point { get; set; }
     }
 }
