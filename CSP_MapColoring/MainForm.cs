@@ -11,18 +11,18 @@ using System.Windows.Forms;
 
 namespace CSP_MapColoring
 {
-    public partial class Main : Form
+    public partial class MainForm : Form
     {
         private int NumOfVertices;
         Dictionary<int, Node> Vertices = new Dictionary<int, Node>();
         bool[,] State;
         Graphics g;
         ArrayList colors = new ArrayList();
-        Domains frmDomains = new Domains();
+        DomainsForm frmDomains = new DomainsForm();
         Dictionary<int, List<int>> Neighbors = new Dictionary<int, List<int>>();
 
         #region Method's
-        public Main()
+        public MainForm()
         {
             InitializeComponent();
         }
@@ -181,28 +181,69 @@ namespace CSP_MapColoring
 
         private void btnForwardChecking_Click(object sender, EventArgs e)
         {
+            rtbLog.Text = "Begin Of Solving CSP.\r\n";
+            if (Neighbors.Count == 0) Neighbor();
+            for (int i = 0; i < NumOfVertices; i++)
+                Vertices[i].Neighbors = Neighbors[i];
+            CSP.Graph = Vertices;
+            string log = string.Empty;
+
             if (clbVar_Val.GetItemChecked(0) && clbVar_Val.GetItemChecked(1) && clbVar_Val.GetItemChecked(2))
+                BackTracking.BT(colors, true, true, true, ref log);
+            else
             {
-                rtbLog.Text += "Begin Of Solving CSP.\r\n";
-                Neighbor();
-                Heuristic.Graph = Vertices;
-
-                for (int i = 0; i < NumOfVertices; i++)
-                    Vertices[i].Neighbors = Neighbors[i];
-                string log = string.Empty;
-                Heuristic.Color(colors, ref log);
-
-                rtbLog.Text += log;
-                for (int i = 0; i < NumOfVertices; i++)
-                    Vertices[i].color = (Color)Heuristic.ColoredMap[i];
-                Draw();
-
-                //if (colors.Count < Vertices.Count){rtbLog.Text = "CSP not be Solve!";return;}else
-                rtbLog.Text += "End Of Solving CSP.\r\n";
+                if (clbVar_Val.GetItemChecked(0) && clbVar_Val.GetItemChecked(1)) BackTracking.BT(colors, false, true, true, ref log);
+                else if (clbVar_Val.GetItemChecked(2)) BackTracking.BT(colors, true, false, true, ref log);
+                else BackTracking.BT(colors, false, false, true, ref log);
             }
-            //if (clbVar_Val.GetItemChecked(0)) Heuristics.MRV();
-            //if (clbVar_Val.GetItemChecked(1)) Heuristics.MostDegree();
-            //if (clbVar_Val.GetItemChecked(2)) Heuristics.LCV();
+
+            rtbLog.Text += log;
+            for (int i = 0; i < NumOfVertices; i++)
+                Vertices[i].color = (Color)CSP.ColoredMap[i];
+            Draw();
+            rtbLog.Text += "End Of Solving CSP.\r\n";
+
+            //if (colors.Count < Vertices.Count){rtbLog.Text = "CSP not be Solve!";return;}else
+        }
+
+        private void btnBackTracking_Click(object sender, EventArgs e)
+        {
+            rtbLog.Text = "Begin Of Solving CSP.\r\n";
+            if (Neighbors.Count == 0) Neighbor();
+            for (int i = 0; i < NumOfVertices; i++)
+                Vertices[i].Neighbors = Neighbors[i];
+            CSP.Graph = Vertices;
+            string log = string.Empty;
+
+
+            if (clbVar_Val.GetItemChecked(0) && clbVar_Val.GetItemChecked(1) && clbVar_Val.GetItemChecked(2))
+                BackTracking.BT(colors, true, true, false, ref log);
+            else
+            {
+                if (clbVar_Val.GetItemChecked(0) && clbVar_Val.GetItemChecked(1)) BackTracking.BT(colors, false, true, false, ref log);
+                else if (clbVar_Val.GetItemChecked(2)) BackTracking.BT(colors, true, false, false, ref log);
+                else BackTracking.BT(colors, false, false, false, ref log);
+            }
+
+            rtbLog.Text += log;
+            for (int i = 0; i < NumOfVertices; i++)
+                Vertices[i].color = (Color)CSP.ColoredMap[i];
+            Draw();
+            rtbLog.Text += "End Of Solving CSP.\r\n";
+        }
+
+        private void clbVar_Val_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (clbVar_Val.GetItemCheckState(0) == CheckState.Checked || clbVar_Val.GetItemCheckState(1) == CheckState.Checked)
+            {
+                clbVar_Val.SetItemCheckState(1, CheckState.Checked);
+                clbVar_Val.SetItemCheckState(0, CheckState.Checked);
+            }
+            if (clbVar_Val.GetItemCheckState(0) == CheckState.Unchecked || clbVar_Val.GetItemCheckState(1) == CheckState.Unchecked)
+            {
+                clbVar_Val.SetItemCheckState(1, CheckState.Unchecked);
+                clbVar_Val.SetItemCheckState(0, CheckState.Unchecked);
+            }
         }
         #endregion
     }

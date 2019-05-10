@@ -1,6 +1,6 @@
 ﻿namespace CSP_MapColoring
 {
-    partial class Main
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -67,13 +67,14 @@
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(978, 557);
-            this.tabControl.TabIndex = 0;
+            this.tabControl.TabIndex = 5;
             // 
             // tabProblem
             // 
             this.tabProblem.Controls.Add(this.grbEdges);
             this.tabProblem.Controls.Add(this.grbSelectVar_Val);
             this.tabProblem.Controls.Add(this.grbNumOfVertices);
+            this.tabProblem.ForeColor = System.Drawing.Color.Black;
             this.tabProblem.Location = new System.Drawing.Point(4, 27);
             this.tabProblem.Margin = new System.Windows.Forms.Padding(4);
             this.tabProblem.Name = "tabProblem";
@@ -104,7 +105,7 @@
             this.btnOKEdge.Location = new System.Drawing.Point(52, 122);
             this.btnOKEdge.Name = "btnOKEdge";
             this.btnOKEdge.Size = new System.Drawing.Size(92, 37);
-            this.btnOKEdge.TabIndex = 2;
+            this.btnOKEdge.TabIndex = 0;
             this.btnOKEdge.Text = "Ok";
             this.btnOKEdge.UseVisualStyleBackColor = true;
             this.btnOKEdge.Click += new System.EventHandler(this.btnOKEdge_Click);
@@ -168,6 +169,7 @@
             this.clbVar_Val.Name = "clbVar_Val";
             this.clbVar_Val.Size = new System.Drawing.Size(218, 88);
             this.clbVar_Val.TabIndex = 0;
+            this.clbVar_Val.SelectedIndexChanged += new System.EventHandler(this.clbVar_Val_SelectedIndexChanged);
             // 
             // grbNumOfVertices
             // 
@@ -265,14 +267,14 @@
             // 
             // btnBackTracking
             // 
-            this.btnBackTracking.Enabled = false;
             this.btnBackTracking.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBackTracking.Location = new System.Drawing.Point(4, 564);
             this.btnBackTracking.Name = "btnBackTracking";
             this.btnBackTracking.Size = new System.Drawing.Size(110, 43);
-            this.btnBackTracking.TabIndex = 3;
+            this.btnBackTracking.TabIndex = 1;
             this.btnBackTracking.Text = "BackTracking";
             this.btnBackTracking.UseVisualStyleBackColor = true;
+            this.btnBackTracking.Click += new System.EventHandler(this.btnBackTracking_Click);
             // 
             // btnForwardChecking
             // 
@@ -280,7 +282,7 @@
             this.btnForwardChecking.Location = new System.Drawing.Point(120, 564);
             this.btnForwardChecking.Name = "btnForwardChecking";
             this.btnForwardChecking.Size = new System.Drawing.Size(151, 43);
-            this.btnForwardChecking.TabIndex = 1;
+            this.btnForwardChecking.TabIndex = 2;
             this.btnForwardChecking.Text = "BT+ForwardChecking";
             this.btnForwardChecking.UseVisualStyleBackColor = true;
             this.btnForwardChecking.Click += new System.EventHandler(this.btnForwardChecking_Click);
@@ -296,7 +298,7 @@
             this.btnArcConsistency.Text = "BT+Arc Consistency";
             this.btnArcConsistency.UseVisualStyleBackColor = true;
             // 
-            // Main
+            // MainForm
             // 
             this.AcceptButton = this.btnForwardChecking;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
@@ -313,7 +315,8 @@
             this.Font = new System.Drawing.Font("Comic Sans MS", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "Main";
+            this.MaximizeBox = false;
+            this.Name = "MainForm";
             this.Text = "CSP solver";
             this.tabControl.ResumeLayout(false);
             this.tabProblem.ResumeLayout(false);

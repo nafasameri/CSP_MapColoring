@@ -1,6 +1,6 @@
 ﻿namespace CSP_MapColoring
 {
-    partial class Domains
+    partial class DomainsForm
     {
         /// <summary>
         /// Required designer variable.

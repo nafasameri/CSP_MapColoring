@@ -11,28 +11,28 @@ using System.Windows.Forms;
 
 namespace CSP_MapColoring
 {
-    public partial class Domains : Form
+    public partial class DomainsForm : Form
     {
         object[] obj = new object[]
         {
-            Color.AliceBlue,
-            Color.Aqua,
-            Color.BlueViolet,
-            Color.DarkSeaGreen,
-            Color.DeepSkyBlue,
+            Color.MidnightBlue,
+            Color.IndianRed,
+            Color.Bisque,
             Color.Violet,
             Color.Tomato,
-            Color.Teal,
-            Color.Thistle,
-            Color.Tan,
-            Color.Lavender,
-            Color.SlateBlue,
-            Color.Silver,
-            Color.SeaGreen,
-            Color.Salmon
+            Color.MediumVioletRed,
+            Color.DarkKhaki,
+            Color.Lime,
+            Color.PaleGreen,
+            Color.PaleTurquoise,
+            Color.Khaki,
+            Color.DeepPink,
+            Color.Gold,
+            Color.Olive,
+            Color.Crimson
         };
 
-        public Domains()
+        public DomainsForm()
         {
             InitializeComponent();
         }
@@ -55,7 +55,10 @@ namespace CSP_MapColoring
             Graphics g = textBox1.CreateGraphics();
             int t = 0;
             for (int i = 0; i < obj.Length; i++)
+            {
                 g.FillEllipse(new SolidBrush((Color)obj[i]), 8, (t++ * 20) + 4, 20, 20);
+                clbDomains.SetItemCheckState(i, CheckState.Checked);
+            }
         }
     }
 }
