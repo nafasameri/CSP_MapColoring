@@ -30,7 +30,7 @@
         {
             this.clbDomains = new System.Windows.Forms.CheckedListBox();
             this.btnOk = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // clbDomains
@@ -54,31 +54,29 @@
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
-            // textBox1
+            // panel1
             // 
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Location = new System.Drawing.Point(207, 3);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(43, 315);
-            this.textBox1.TabIndex = 4;
+            this.panel1.BackColor = System.Drawing.Color.White;
+            this.panel1.Location = new System.Drawing.Point(209, 3);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(41, 315);
+            this.panel1.TabIndex = 5;
             // 
-            // Domains
+            // DomainsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(253, 371);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.clbDomains);
             this.Font = new System.Drawing.Font("Comic Sans MS", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "Domains";
+            this.Name = "DomainsForm";
             this.Text = "Domains";
             this.Load += new System.EventHandler(this.Domains_Load);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -86,6 +84,6 @@
 
         private System.Windows.Forms.CheckedListBox clbDomains;
         private System.Windows.Forms.Button btnOk;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Panel panel1;
     }
 }

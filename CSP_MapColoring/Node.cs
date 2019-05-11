@@ -8,10 +8,10 @@ namespace CSP_MapColoring
 {
     class Node
     {
-        public string Name { get; set; }
-        public List<int> Neighbors { get; set; }
+        public int Name { get; set; }
         public Color color { get; set; }
-        public ArrayList domain = new ArrayList();
         public Point point { get; set; }
+        public List<int> Neighbors { get; set; }
+        public ArrayList domain { get; set; }
     }
 }

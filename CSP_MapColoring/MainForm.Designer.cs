@@ -48,8 +48,8 @@
             this.btnDomains = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
             this.btnBackTracking = new System.Windows.Forms.Button();
-            this.btnForwardChecking = new System.Windows.Forms.Button();
             this.btnArcConsistency = new System.Windows.Forms.Button();
+            this.btnForwardChecking = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.tabProblem.SuspendLayout();
             this.grbEdges.SuspendLayout();
@@ -67,7 +67,7 @@
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(978, 557);
-            this.tabControl.TabIndex = 5;
+            this.tabControl.TabIndex = 0;
             // 
             // tabProblem
             // 
@@ -276,17 +276,6 @@
             this.btnBackTracking.UseVisualStyleBackColor = true;
             this.btnBackTracking.Click += new System.EventHandler(this.btnBackTracking_Click);
             // 
-            // btnForwardChecking
-            // 
-            this.btnForwardChecking.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnForwardChecking.Location = new System.Drawing.Point(120, 564);
-            this.btnForwardChecking.Name = "btnForwardChecking";
-            this.btnForwardChecking.Size = new System.Drawing.Size(151, 43);
-            this.btnForwardChecking.TabIndex = 2;
-            this.btnForwardChecking.Text = "BT+ForwardChecking";
-            this.btnForwardChecking.UseVisualStyleBackColor = true;
-            this.btnForwardChecking.Click += new System.EventHandler(this.btnForwardChecking_Click);
-            // 
             // btnArcConsistency
             // 
             this.btnArcConsistency.Enabled = false;
@@ -298,15 +287,25 @@
             this.btnArcConsistency.Text = "BT+Arc Consistency";
             this.btnArcConsistency.UseVisualStyleBackColor = true;
             // 
+            // btnForwardChecking
+            // 
+            this.btnForwardChecking.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnForwardChecking.Location = new System.Drawing.Point(120, 564);
+            this.btnForwardChecking.Name = "btnForwardChecking";
+            this.btnForwardChecking.Size = new System.Drawing.Size(151, 43);
+            this.btnForwardChecking.TabIndex = 6;
+            this.btnForwardChecking.Text = "BT+ForwardChecking";
+            this.btnForwardChecking.UseVisualStyleBackColor = true;
+            this.btnForwardChecking.Click += new System.EventHandler(this.btnForwardChecking_Click);
+            // 
             // MainForm
             // 
-            this.AcceptButton = this.btnForwardChecking;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(979, 614);
-            this.Controls.Add(this.btnArcConsistency);
             this.Controls.Add(this.btnForwardChecking);
+            this.Controls.Add(this.btnArcConsistency);
             this.Controls.Add(this.btnBackTracking);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnDomains);
@@ -346,7 +345,6 @@
         private System.Windows.Forms.Panel pnlResult;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Button btnBackTracking;
-        private System.Windows.Forms.Button btnForwardChecking;
         private System.Windows.Forms.GroupBox grbEdges;
         private System.Windows.Forms.Button btnOKEdge;
         private System.Windows.Forms.Label lblTo;
@@ -355,6 +353,7 @@
         private System.Windows.Forms.ComboBox cmbFromVertices;
         private System.Windows.Forms.GroupBox grbNumOfVertices;
         private System.Windows.Forms.Button btnArcConsistency;
+        private System.Windows.Forms.Button btnForwardChecking;
     }
 }
 

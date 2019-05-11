@@ -124,14 +124,14 @@ namespace CSP_MapColoring
         private void Draw_(Color color, Node Vertice)
         {
             g.FillEllipse(new SolidBrush(color), Vertice.point.X - 10, Vertice.point.Y - 10, 20, 20);
-            g.DrawString(Vertice.Name, new Font(FontFamily.GenericSansSerif, 12), new SolidBrush(Color.DarkViolet), new Point(Vertice.point.X - 10, Vertice.point.Y - 10));
+            g.DrawString(Vertice.Name.ToString(), new Font(FontFamily.GenericSansSerif, 12), new SolidBrush(Color.DarkViolet), new Point(Vertice.point.X - 10, Vertice.point.Y - 10));
         }
         #endregion
 
         #region Controls
         private void btnDomains_Click(object sender, EventArgs e)
         {
-            frmDomains.Show();
+            frmDomains.ShowDialog();
             frmDomains.FormClosing += FrmDomains_FormClosing;
         }
 
@@ -140,6 +140,7 @@ namespace CSP_MapColoring
             frmDomains.retItems(ref colors);
             foreach (var item in Vertices)
                 item.Value.domain = colors;
+            MessageBox.Show("Successfully saved colors.", "Saved colors...", MessageBoxButtons.OK);
         }
 
         private void btnOk_Click(object sender, EventArgs e)
@@ -155,9 +156,12 @@ namespace CSP_MapColoring
                 cmbFromVertices.Items.AddRange(new object[] { i });
                 cmbToVertices.Items.AddRange(new object[] { i });
                 Vertices.Add(i, new Node());
-                Vertices[i].Name = i.ToString();
-                Vertices[i].point = points[i];
+                Vertices[i].Name = i;
                 Vertices[i].color = Color.Snow;
+                if (i < points.Length) Vertices[i].point = points[i];
+                else if (i < 40) Vertices[i].point = new Point(i, (i - points.Length) * 20);
+                else if (i < 70) Vertices[i].point = new Point(i + 20, (i - 40) * 20);
+                else Vertices[i].point = new Point(i + 20, (i - 70) * 20);
             }
             grbNumOfVertices.Enabled = false;
             grbEdges.Enabled = true;
@@ -181,6 +185,8 @@ namespace CSP_MapColoring
 
         private void btnForwardChecking_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < NumOfVertices; i++)
+                State[i, i] = false;
             rtbLog.Text = "Begin Of Solving CSP.\r\n";
             if (Neighbors.Count == 0) Neighbor();
             for (int i = 0; i < NumOfVertices; i++)
@@ -199,7 +205,8 @@ namespace CSP_MapColoring
 
             rtbLog.Text += log;
             for (int i = 0; i < NumOfVertices; i++)
-                Vertices[i].color = (Color)CSP.ColoredMap[i];
+                if (CSP.ColoredMap[i] != null)
+                    Vertices[i].color = (Color)CSP.ColoredMap[i];
             Draw();
             rtbLog.Text += "End Of Solving CSP.\r\n";
 
@@ -208,6 +215,8 @@ namespace CSP_MapColoring
 
         private void btnBackTracking_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < NumOfVertices; i++)
+                State[i, i] = false;
             rtbLog.Text = "Begin Of Solving CSP.\r\n";
             if (Neighbors.Count == 0) Neighbor();
             for (int i = 0; i < NumOfVertices; i++)
@@ -227,7 +236,8 @@ namespace CSP_MapColoring
 
             rtbLog.Text += log;
             for (int i = 0; i < NumOfVertices; i++)
-                Vertices[i].color = (Color)CSP.ColoredMap[i];
+                if (CSP.ColoredMap[i] != null)
+                    Vertices[i].color = (Color)CSP.ColoredMap[i];
             Draw();
             rtbLog.Text += "End Of Solving CSP.\r\n";
         }
