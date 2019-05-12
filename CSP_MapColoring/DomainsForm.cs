@@ -37,11 +37,13 @@ namespace CSP_MapColoring
             InitializeComponent();
         }
 
-        public void retItems(ref ArrayList list)
+        public List<Color> retItems()
         {
+            List<Color> list = new List<Color>();
             for (int i = 0; i < obj.Length; i++)
                 if (clbDomains.GetItemCheckState(i) == CheckState.Checked)
                     list.Add((Color)clbDomains.Items[i]);
+            return list;
         }
 
         private void btnOk_Click(object sender, EventArgs e)

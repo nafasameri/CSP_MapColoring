@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Drawing;
 using System.Threading.Tasks;
 
 namespace CSP_MapColoring
@@ -16,7 +16,7 @@ namespace CSP_MapColoring
         /// <param name="vertex">selected vertex</param>
         /// <param name="color">selected color</param>
         /// <returns>this color can be add to vertex?</returns>
-        public static bool CanColor(int vertex, object color)
+        public bool CanColor(int vertex, Color color)
         {
             if (Graph[vertex] == null)
                 return true;
@@ -33,7 +33,7 @@ namespace CSP_MapColoring
         /// </summary>
         /// <param name="vertex"></param>
         /// <returns>degree vertex</returns>
-        public static int GetDegree(int vertex)
+        public int GetDegree(int vertex)
         {
             if (vertex == 0) return 0;
             return NodeDegrees[vertex - 1];
@@ -45,7 +45,7 @@ namespace CSP_MapColoring
         /// </summary>
         /// <param name="vertex">selected vertex</param>
         /// <returns>order asc degree of each vertex</returns>
-        public static List<int> GetMRV(int vertex)
+        public List<int> GetMRV(int vertex)
         {
             Dictionary<int, int> mrvs = new Dictionary<int, int>();
 
@@ -71,9 +71,9 @@ namespace CSP_MapColoring
         /// <param name="vertex">selected vertex</param>
         /// <param name="colors">colors</param>
         /// <returns>select one color for this vertex</returns>
-        public static object GetLCV(int vertex, ArrayList colors)
+        public Color GetLCV(int vertex, List<Color> colors)
         {
-            Dictionary<object, object> lcvs = new Dictionary<object, object>();
+            Dictionary<Color, object> lcvs = new Dictionary<Color, object>();
 
             foreach (var color in colors)
             {

@@ -50,12 +50,14 @@
             this.btnBackTracking = new System.Windows.Forms.Button();
             this.btnArcConsistency = new System.Windows.Forms.Button();
             this.btnForwardChecking = new System.Windows.Forms.Button();
+            this.dataGridView = new System.Windows.Forms.DataGridView();
             this.tabControl.SuspendLayout();
             this.tabProblem.SuspendLayout();
             this.grbEdges.SuspendLayout();
             this.grbSelectVar_Val.SuspendLayout();
             this.grbNumOfVertices.SuspendLayout();
             this.tabResult.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl
@@ -71,6 +73,8 @@
             // 
             // tabProblem
             // 
+            this.tabProblem.BackColor = System.Drawing.SystemColors.Control;
+            this.tabProblem.Controls.Add(this.dataGridView);
             this.tabProblem.Controls.Add(this.grbEdges);
             this.tabProblem.Controls.Add(this.grbSelectVar_Val);
             this.tabProblem.Controls.Add(this.grbNumOfVertices);
@@ -82,7 +86,6 @@
             this.tabProblem.Size = new System.Drawing.Size(970, 526);
             this.tabProblem.TabIndex = 0;
             this.tabProblem.Text = "Problem";
-            this.tabProblem.UseVisualStyleBackColor = true;
             // 
             // grbEdges
             // 
@@ -202,6 +205,7 @@
             // 
             // tabResult
             // 
+            this.tabResult.BackColor = System.Drawing.SystemColors.Control;
             this.tabResult.Controls.Add(this.pnlResult);
             this.tabResult.Controls.Add(this.lblLog);
             this.tabResult.Controls.Add(this.rtbLog);
@@ -212,7 +216,6 @@
             this.tabResult.Size = new System.Drawing.Size(970, 526);
             this.tabResult.TabIndex = 1;
             this.tabResult.Text = "Solving Result";
-            this.tabResult.UseVisualStyleBackColor = true;
             // 
             // pnlResult
             // 
@@ -298,10 +301,20 @@
             this.btnForwardChecking.UseVisualStyleBackColor = true;
             this.btnForwardChecking.Click += new System.EventHandler(this.btnForwardChecking_Click);
             // 
+            // dataGridView
+            // 
+            this.dataGridView.AllowUserToAddRows = false;
+            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.Location = new System.Drawing.Point(238, 7);
+            this.dataGridView.Name = "dataGridView";
+            this.dataGridView.Size = new System.Drawing.Size(732, 512);
+            this.dataGridView.TabIndex = 10;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(979, 614);
             this.Controls.Add(this.btnForwardChecking);
@@ -326,6 +339,7 @@
             this.grbNumOfVertices.PerformLayout();
             this.tabResult.ResumeLayout(false);
             this.tabResult.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -354,6 +368,7 @@
         private System.Windows.Forms.GroupBox grbNumOfVertices;
         private System.Windows.Forms.Button btnArcConsistency;
         private System.Windows.Forms.Button btnForwardChecking;
+        private System.Windows.Forms.DataGridView dataGridView;
     }
 }
 

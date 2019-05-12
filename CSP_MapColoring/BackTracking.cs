@@ -2,11 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Drawing;
 
 namespace CSP_MapColoring
 {
     class BackTracking : CSP
     {
+        public Heuristic heuristic = new Heuristic();
         /// <summary>
         /// checks if the color is acceptable 
         /// else select next color
@@ -14,11 +16,11 @@ namespace CSP_MapColoring
         /// <param name="vertex">Vertex selected</param>
         /// <param name="log">message coloring</param>
         /// <param name="index">index color</param>
-        private static void Coloring(int vertex, ref string log, int index = 1)
+        private void Coloring(int vertex, ref string log, int index = 1)
         {
             log += " Select " + vertex.ToString() + " " + ColoredMap[vertex].ToString() + "\r\n";
 
-            if (Heuristic.CanColor(vertex, ColoredMap[vertex]))
+            if (heuristic.CanColor(vertex, ColoredMap[vertex]))
                 log += " Add " + vertex.ToString() + " " + ColoredMap[vertex].ToString() + "\r\n";
             else
             {
@@ -49,23 +51,26 @@ namespace CSP_MapColoring
         /// <param name="heuristicMRV">flg mrv</param>
         /// <param name="FC">flg forward checking</param>
         /// <param name="log">message coloring</param>
-        private static void DFS(int vertex, ArrayList colors, bool heuristicLCV, bool heuristicMRV, bool FC, ref string log)
+        private void DFS(int vertex, List<Color> colors, bool heuristicLCV, bool heuristicMRV, bool FC, ref string log)
         {
             _Visited.Add(vertex);
-            if (heuristicLCV) ColoredMap[vertex] = Heuristic.GetLCV(vertex, colors);
+            if (heuristicLCV) ColoredMap[vertex] = heuristic.GetLCV(vertex, colors);
             else ColoredMap[vertex] = Graph[vertex].domain[0];
 
             if (ColoredMap[vertex] != null) Coloring(vertex, ref log);
             else { log += " Select " + vertex.ToString() + " not Color exist\r\n"; return; }
 
-            if (FC) ForwardChecking(Graph[vertex], ColoredMap[vertex], ref log);
+            if (FC)
+                if (!ForwardChecking(Graph[vertex], ColoredMap[vertex], ref log))
+                    DFS(vertex, colors, heuristicLCV, heuristicMRV, FC, ref log);
+
 
             if (Graph[vertex] != null)
             {
                 object adjList;
                 if (heuristicMRV)
                 {
-                    adjList = Heuristic.GetMRV(vertex).OrderByDescending(v => Heuristic.GetDegree(v));
+                    adjList = heuristic.GetMRV(vertex).OrderByDescending(v => heuristic.GetDegree(v));
                     foreach (int next in (IOrderedEnumerable<int>)adjList)
                         if (!_Visited.Contains(next))
                             DFS(next, colors, heuristicLCV, heuristicMRV, FC, ref log);
@@ -94,14 +99,16 @@ namespace CSP_MapColoring
         /// <param name="heuristicMRV">flg mrv</param>
         /// <param name="FC">flg forward checking</param>
         /// <param name="log">message coloring</param>
-        public static void BT(ArrayList colors, bool heuristicLCV, bool heuristicMRV, bool FC, ref string log)
+        public void BT(List<Color> colors, bool heuristicLCV, bool heuristicMRV, bool FC, ref string log)
         {
-            if (ColoredMap == null) ColoredMap = new ArrayList(Graph.Count + 1);
+            if (ColoredMap == null) ColoredMap = new List<Color>(Graph.Count + 1);
             for (int i = 0; i <= Graph.Count; i++)
-                ColoredMap.Add(null);
+                ColoredMap.Add(Color.Snow);
+            heuristic.ColoredMap = ColoredMap;
             _NumberOfColors = colors.Count;
 
             NodeDegrees = Graph.OrderBy(k => k.Key).Select(s => s.Value.Neighbors.Count).ToArray();
+            heuristic.NodeDegrees = NodeDegrees;
 
             foreach (int key in Graph.Keys)
                 if (!_Visited.Contains(key))
@@ -114,20 +121,19 @@ namespace CSP_MapColoring
         /// <param name="node">selected node</param>
         /// <param name="color">selected color</param>
         /// <param name="log">message coloring</param>
-        public static void ForwardChecking(Node node, object color, ref string log)
+        public bool ForwardChecking(Node node, object color, ref string log)
         {
+            bool isNotNULL = true;
             foreach (var Neighbor in node.Neighbors)
                 for (int i = 0; i < Graph.Count; i++)
-                    if (Graph[i].Name == Neighbor && Graph[i].domain != null)// && Graph[i].domain.Contains(color)) 
+                    if (Graph[i].Name == Neighbor && Graph[i].domain != null && Graph[i].domain.Contains((Color)color))
                     {
-                        Graph[i].domain.Remove(color);
+                        Graph[i].domain.Remove((Color)color);
                         log += " Remove " + color + " From Domain's " + Graph[i].Name + "\r\n";
+                        if (Graph[i].domain == null)
+                            isNotNULL = false;
                     }
-            for (int i = 0; i < Graph.Count; i++)
-                if (Graph[i].domain == null)
-                {
-                    //back track
-                }
+            return isNotNULL;
         }
     }
 }

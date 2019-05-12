@@ -13,13 +13,18 @@ namespace CSP_MapColoring
 {
     public partial class MainForm : Form
     {
+        private string log = string.Empty;
+
         private int NumOfVertices;
-        Dictionary<int, Node> Vertices = new Dictionary<int, Node>();
+        Dictionary<int, Node> Graph = new Dictionary<int, Node>();
         bool[,] State;
         Graphics g;
-        ArrayList colors = new ArrayList();
-        DomainsForm frmDomains = new DomainsForm();
+        List<Color> colors;// = new List<Color>();
+        DomainsForm frmDomains;
         Dictionary<int, List<int>> Neighbors = new Dictionary<int, List<int>>();
+        BackTracking BT = new BackTracking();
+        Heuristic heuristic = new Heuristic();
+        Random random = new Random();
 
         #region Method's
         public MainForm()
@@ -46,7 +51,7 @@ namespace CSP_MapColoring
         private int dragingPointIndex;
         private void mouseDown(object sender, MouseEventArgs e)
         {
-            foreach (var p in Vertices)
+            foreach (var p in Graph)
             {
                 if (p.Value.point.X + 10 >= e.X && p.Value.point.X - 10 <= e.X)
                 {
@@ -72,10 +77,10 @@ namespace CSP_MapColoring
         {
             if (draging)
             {
-                dragingPoint = Vertices[dragingPointIndex].point;
+                dragingPoint = Graph[dragingPointIndex].point;
                 dragingPoint.X = e.X;
                 dragingPoint.Y = e.Y;
-                Vertices[dragingPointIndex].point = dragingPoint;
+                Graph[dragingPointIndex].point = dragingPoint;
                 Draw();
             }
         }
@@ -112,9 +117,9 @@ namespace CSP_MapColoring
             for (int i = 0; i < NumOfVertices; i++)
                 for (int j = 0; j < NumOfVertices; j++)
                     if (State[i, j])
-                        g.DrawLine(new Pen(Color.DarkOrchid), Vertices[i].point, Vertices[j].point);
+                        g.DrawLine(new Pen(Color.DarkOrchid), Graph[i].point, Graph[j].point);
             /// draw nodes and indexs
-            foreach (var item in Vertices)
+            foreach (var item in Graph)
             {
                 g.FillEllipse(new SolidBrush(item.Value.color), item.Value.point.X - 10, item.Value.point.Y - 10, 20, 20);
                 g.DrawString(item.Key.ToString(), this.Font, new SolidBrush(Color.Black), new Point(item.Value.point.X - 10, item.Value.point.Y - 10));
@@ -131,15 +136,16 @@ namespace CSP_MapColoring
         #region Controls
         private void btnDomains_Click(object sender, EventArgs e)
         {
-            frmDomains.ShowDialog();
+            frmDomains = new DomainsForm();
+            frmDomains.Show();
             frmDomains.FormClosing += FrmDomains_FormClosing;
         }
 
         private void FrmDomains_FormClosing(object sender, FormClosingEventArgs e)
         {
-            frmDomains.retItems(ref colors);
-            foreach (var item in Vertices)
-                item.Value.domain = colors;
+            colors = frmDomains.retItems();
+            foreach (var item in Graph)
+                item.Value.domain.AddRange(colors);
             MessageBox.Show("Successfully saved colors.", "Saved colors...", MessageBoxButtons.OK);
         }
 
@@ -155,17 +161,15 @@ namespace CSP_MapColoring
             {
                 cmbFromVertices.Items.AddRange(new object[] { i });
                 cmbToVertices.Items.AddRange(new object[] { i });
-                Vertices.Add(i, new Node());
-                Vertices[i].Name = i;
-                Vertices[i].color = Color.Snow;
-                if (i < points.Length) Vertices[i].point = points[i];
-                else if (i < 40) Vertices[i].point = new Point(i, (i - points.Length) * 20);
-                else if (i < 70) Vertices[i].point = new Point(i + 20, (i - 40) * 20);
-                else Vertices[i].point = new Point(i + 20, (i - 70) * 20);
+                Graph.Add(i, new Node(i, Color.Snow));
+                if (i < points.Length) Graph[i].point = points[i];
+                else if (i < 40) Graph[i].point = new Point(i, (i - points.Length) * 20);
+                else if (i < 70) Graph[i].point = new Point(i + 20, (i - 40) * 20);
+                else Graph[i].point = new Point(i + 20, (i - 70) * 20);
             }
             grbNumOfVertices.Enabled = false;
             grbEdges.Enabled = true;
-            grbSelectVar_Val.Enabled = false;
+            grbSelectVar_Val.Enabled = true;
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -183,6 +187,20 @@ namespace CSP_MapColoring
             grbSelectVar_Val.Enabled = true;
         }
 
+        private void clbVar_Val_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (clbVar_Val.GetItemCheckState(0) == CheckState.Checked || clbVar_Val.GetItemCheckState(1) == CheckState.Checked)
+            {
+                clbVar_Val.SetItemCheckState(1, CheckState.Checked);
+                clbVar_Val.SetItemCheckState(0, CheckState.Checked);
+            }
+            if (clbVar_Val.GetItemCheckState(0) == CheckState.Unchecked || clbVar_Val.GetItemCheckState(1) == CheckState.Unchecked)
+            {
+                clbVar_Val.SetItemCheckState(1, CheckState.Unchecked);
+                clbVar_Val.SetItemCheckState(0, CheckState.Unchecked);
+            }
+        }
+
         private void btnForwardChecking_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < NumOfVertices; i++)
@@ -190,23 +208,23 @@ namespace CSP_MapColoring
             rtbLog.Text = "Begin Of Solving CSP.\r\n";
             if (Neighbors.Count == 0) Neighbor();
             for (int i = 0; i < NumOfVertices; i++)
-                Vertices[i].Neighbors = Neighbors[i];
-            CSP.Graph = Vertices;
-            string log = string.Empty;
+                Graph[i].Neighbors = Neighbors[i];
+            BT.Graph = heuristic.Graph = Graph;
+            BT.heuristic = heuristic;
 
             if (clbVar_Val.GetItemChecked(0) && clbVar_Val.GetItemChecked(1) && clbVar_Val.GetItemChecked(2))
-                BackTracking.BT(colors, true, true, true, ref log);
+                BT.BT(colors, true, true, true, ref log);
             else
             {
-                if (clbVar_Val.GetItemChecked(0) && clbVar_Val.GetItemChecked(1)) BackTracking.BT(colors, false, true, true, ref log);
-                else if (clbVar_Val.GetItemChecked(2)) BackTracking.BT(colors, true, false, true, ref log);
-                else BackTracking.BT(colors, false, false, true, ref log);
+                if (clbVar_Val.GetItemChecked(0) && clbVar_Val.GetItemChecked(1)) BT.BT(colors, false, true, true, ref log);
+                else if (clbVar_Val.GetItemChecked(2)) BT.BT(colors, true, false, true, ref log);
+                else BT.BT(colors, false, false, true, ref log);
             }
 
             rtbLog.Text += log;
             for (int i = 0; i < NumOfVertices; i++)
-                if (CSP.ColoredMap[i] != null)
-                    Vertices[i].color = (Color)CSP.ColoredMap[i];
+                if (BT.ColoredMap[i] != null)
+                    Graph[i].color = BT.ColoredMap[i];
             Draw();
             rtbLog.Text += "End Of Solving CSP.\r\n";
 
@@ -220,40 +238,26 @@ namespace CSP_MapColoring
             rtbLog.Text = "Begin Of Solving CSP.\r\n";
             if (Neighbors.Count == 0) Neighbor();
             for (int i = 0; i < NumOfVertices; i++)
-                Vertices[i].Neighbors = Neighbors[i];
-            CSP.Graph = Vertices;
-            string log = string.Empty;
+                Graph[i].Neighbors = Neighbors[i];
+            BT.Graph = heuristic.Graph = Graph;
+            BT.heuristic = heuristic;
 
 
             if (clbVar_Val.GetItemChecked(0) && clbVar_Val.GetItemChecked(1) && clbVar_Val.GetItemChecked(2))
-                BackTracking.BT(colors, true, true, false, ref log);
+                BT.BT(colors, true, true, false, ref log);
             else
             {
-                if (clbVar_Val.GetItemChecked(0) && clbVar_Val.GetItemChecked(1)) BackTracking.BT(colors, false, true, false, ref log);
-                else if (clbVar_Val.GetItemChecked(2)) BackTracking.BT(colors, true, false, false, ref log);
-                else BackTracking.BT(colors, false, false, false, ref log);
+                if (clbVar_Val.GetItemChecked(0) && clbVar_Val.GetItemChecked(1)) BT.BT(colors, false, true, false, ref log);
+                else if (clbVar_Val.GetItemChecked(2)) BT.BT(colors, true, false, false, ref log);
+                else BT.BT(colors, false, false, false, ref log);
             }
 
             rtbLog.Text += log;
             for (int i = 0; i < NumOfVertices; i++)
-                if (CSP.ColoredMap[i] != null)
-                    Vertices[i].color = (Color)CSP.ColoredMap[i];
+                if (BT.ColoredMap[i] != null)
+                    Graph[i].color = BT.ColoredMap[i];
             Draw();
             rtbLog.Text += "End Of Solving CSP.\r\n";
-        }
-
-        private void clbVar_Val_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (clbVar_Val.GetItemCheckState(0) == CheckState.Checked || clbVar_Val.GetItemCheckState(1) == CheckState.Checked)
-            {
-                clbVar_Val.SetItemCheckState(1, CheckState.Checked);
-                clbVar_Val.SetItemCheckState(0, CheckState.Checked);
-            }
-            if (clbVar_Val.GetItemCheckState(0) == CheckState.Unchecked || clbVar_Val.GetItemCheckState(1) == CheckState.Unchecked)
-            {
-                clbVar_Val.SetItemCheckState(1, CheckState.Unchecked);
-                clbVar_Val.SetItemCheckState(0, CheckState.Unchecked);
-            }
         }
         #endregion
     }

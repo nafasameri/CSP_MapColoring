@@ -12,6 +12,13 @@ namespace CSP_MapColoring
         public Color color { get; set; }
         public Point point { get; set; }
         public List<int> Neighbors { get; set; }
-        public ArrayList domain { get; set; }
+        public List<Color> domain { get; set; }
+
+        public Node(int Name, Color color)
+        {
+            this.Name = Name;
+            this.color = color;
+            domain = new List<Color>();
+        }
     }
 }
