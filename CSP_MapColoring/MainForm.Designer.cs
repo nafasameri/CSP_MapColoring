@@ -30,6 +30,8 @@
         {
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabProblem = new System.Windows.Forms.TabPage();
+            this.pnlProblem = new System.Windows.Forms.Panel();
+            this.btnRandomGenerateGraph = new System.Windows.Forms.Button();
             this.grbEdges = new System.Windows.Forms.GroupBox();
             this.btnOKEdge = new System.Windows.Forms.Button();
             this.lblTo = new System.Windows.Forms.Label();
@@ -50,14 +52,13 @@
             this.btnBackTracking = new System.Windows.Forms.Button();
             this.btnArcConsistency = new System.Windows.Forms.Button();
             this.btnForwardChecking = new System.Windows.Forms.Button();
-            this.dataGridView = new System.Windows.Forms.DataGridView();
             this.tabControl.SuspendLayout();
             this.tabProblem.SuspendLayout();
+            this.pnlProblem.SuspendLayout();
             this.grbEdges.SuspendLayout();
             this.grbSelectVar_Val.SuspendLayout();
             this.grbNumOfVertices.SuspendLayout();
             this.tabResult.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl
@@ -74,7 +75,7 @@
             // tabProblem
             // 
             this.tabProblem.BackColor = System.Drawing.SystemColors.Control;
-            this.tabProblem.Controls.Add(this.dataGridView);
+            this.tabProblem.Controls.Add(this.pnlProblem);
             this.tabProblem.Controls.Add(this.grbEdges);
             this.tabProblem.Controls.Add(this.grbSelectVar_Val);
             this.tabProblem.Controls.Add(this.grbNumOfVertices);
@@ -86,6 +87,26 @@
             this.tabProblem.Size = new System.Drawing.Size(970, 526);
             this.tabProblem.TabIndex = 0;
             this.tabProblem.Text = "Problem";
+            // 
+            // pnlProblem
+            // 
+            this.pnlProblem.BackColor = System.Drawing.SystemColors.Control;
+            this.pnlProblem.Controls.Add(this.btnRandomGenerateGraph);
+            this.pnlProblem.Location = new System.Drawing.Point(238, 8);
+            this.pnlProblem.Name = "pnlProblem";
+            this.pnlProblem.Size = new System.Drawing.Size(732, 511);
+            this.pnlProblem.TabIndex = 12;
+            // 
+            // btnRandomGenerateGraph
+            // 
+            this.btnRandomGenerateGraph.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRandomGenerateGraph.Location = new System.Drawing.Point(553, 465);
+            this.btnRandomGenerateGraph.Name = "btnRandomGenerateGraph";
+            this.btnRandomGenerateGraph.Size = new System.Drawing.Size(172, 43);
+            this.btnRandomGenerateGraph.TabIndex = 11;
+            this.btnRandomGenerateGraph.Text = "Random Generate Graph";
+            this.btnRandomGenerateGraph.UseVisualStyleBackColor = true;
+            this.btnRandomGenerateGraph.Click += new System.EventHandler(this.btnRandomGenerateGraph_Click);
             // 
             // grbEdges
             // 
@@ -219,10 +240,10 @@
             // 
             // pnlResult
             // 
-            this.pnlResult.BackColor = System.Drawing.Color.White;
+            this.pnlResult.BackColor = System.Drawing.SystemColors.Control;
             this.pnlResult.Location = new System.Drawing.Point(8, 8);
             this.pnlResult.Name = "pnlResult";
-            this.pnlResult.Size = new System.Drawing.Size(652, 511);
+            this.pnlResult.Size = new System.Drawing.Size(615, 511);
             this.pnlResult.TabIndex = 2;
             this.pnlResult.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mouseDown);
             this.pnlResult.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mouseMove);
@@ -231,7 +252,7 @@
             // lblLog
             // 
             this.lblLog.AutoSize = true;
-            this.lblLog.Location = new System.Drawing.Point(666, 4);
+            this.lblLog.Location = new System.Drawing.Point(629, 4);
             this.lblLog.Name = "lblLog";
             this.lblLog.Size = new System.Drawing.Size(33, 18);
             this.lblLog.TabIndex = 1;
@@ -239,9 +260,9 @@
             // 
             // rtbLog
             // 
-            this.rtbLog.Location = new System.Drawing.Point(666, 25);
+            this.rtbLog.Location = new System.Drawing.Point(629, 25);
             this.rtbLog.Name = "rtbLog";
-            this.rtbLog.Size = new System.Drawing.Size(297, 494);
+            this.rtbLog.Size = new System.Drawing.Size(334, 494);
             this.rtbLog.TabIndex = 0;
             this.rtbLog.Text = "";
             // 
@@ -301,15 +322,6 @@
             this.btnForwardChecking.UseVisualStyleBackColor = true;
             this.btnForwardChecking.Click += new System.EventHandler(this.btnForwardChecking_Click);
             // 
-            // dataGridView
-            // 
-            this.dataGridView.AllowUserToAddRows = false;
-            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Location = new System.Drawing.Point(238, 7);
-            this.dataGridView.Name = "dataGridView";
-            this.dataGridView.Size = new System.Drawing.Size(732, 512);
-            this.dataGridView.TabIndex = 10;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
@@ -332,6 +344,7 @@
             this.Text = "CSP solver";
             this.tabControl.ResumeLayout(false);
             this.tabProblem.ResumeLayout(false);
+            this.pnlProblem.ResumeLayout(false);
             this.grbEdges.ResumeLayout(false);
             this.grbEdges.PerformLayout();
             this.grbSelectVar_Val.ResumeLayout(false);
@@ -339,7 +352,6 @@
             this.grbNumOfVertices.PerformLayout();
             this.tabResult.ResumeLayout(false);
             this.tabResult.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -368,7 +380,8 @@
         private System.Windows.Forms.GroupBox grbNumOfVertices;
         private System.Windows.Forms.Button btnArcConsistency;
         private System.Windows.Forms.Button btnForwardChecking;
-        private System.Windows.Forms.DataGridView dataGridView;
+        private System.Windows.Forms.Button btnRandomGenerateGraph;
+        private System.Windows.Forms.Panel pnlProblem;
     }
 }
 

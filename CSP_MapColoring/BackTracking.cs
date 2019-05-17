@@ -32,7 +32,8 @@ namespace CSP_MapColoring
                 }
                 else
                 {
-                    log += "CSP not be Solve!";
+                    ColoredMap[vertex] = Color.Snow;
+                    log += "CSP not be Solve!\r\n";
                     return;
                 }
             }
@@ -62,8 +63,10 @@ namespace CSP_MapColoring
 
             if (FC)
                 if (!ForwardChecking(Graph[vertex], ColoredMap[vertex], ref log))
+                {
+                    DisFC(Graph[vertex], ColoredMap[vertex], ref log);
                     DFS(vertex, colors, heuristicLCV, heuristicMRV, FC, ref log);
-
+                }
 
             if (Graph[vertex] != null)
             {
@@ -101,7 +104,8 @@ namespace CSP_MapColoring
         /// <param name="log">message coloring</param>
         public void BT(List<Color> colors, bool heuristicLCV, bool heuristicMRV, bool FC, ref string log)
         {
-            if (ColoredMap == null) ColoredMap = new List<Color>(Graph.Count + 1);
+            if (ColoredMap != null) ColoredMap.Clear();
+            ColoredMap = new List<Color>(Graph.Count + 1);
             for (int i = 0; i <= Graph.Count; i++)
                 ColoredMap.Add(Color.Snow);
             heuristic.ColoredMap = ColoredMap;
@@ -113,6 +117,7 @@ namespace CSP_MapColoring
             foreach (int key in Graph.Keys)
                 if (!_Visited.Contains(key))
                     DFS(key, colors, heuristicLCV, heuristicMRV, FC, ref log);
+            _Visited.Clear();
         }
 
         /// <summary>
@@ -121,19 +126,36 @@ namespace CSP_MapColoring
         /// <param name="node">selected node</param>
         /// <param name="color">selected color</param>
         /// <param name="log">message coloring</param>
-        public bool ForwardChecking(Node node, object color, ref string log)
+        private bool ForwardChecking(Node node, Color color, ref string log)
         {
             bool isNotNULL = true;
             foreach (var Neighbor in node.Neighbors)
                 for (int i = 0; i < Graph.Count; i++)
-                    if (Graph[i].Name == Neighbor && Graph[i].domain != null && Graph[i].domain.Contains((Color)color))
+                    if (Graph[i].Name == Neighbor && Graph[i].domain != null && Graph[i].domain.Contains(color))
                     {
-                        Graph[i].domain.Remove((Color)color);
+                        Graph[i].domain.Remove(color);
                         log += " Remove " + color + " From Domain's " + Graph[i].Name + "\r\n";
                         if (Graph[i].domain == null)
                             isNotNULL = false;
                     }
             return isNotNULL;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="color"></param>
+        /// <param name="log"></param>
+        private void DisFC(Node node, Color color, ref string log)
+        {
+            foreach (var Neighbor in node.Neighbors)
+                for (int i = 0; i < Graph.Count; i++)
+                    if (Graph[i].Name == Neighbor)
+                    {
+                        Graph[i].domain.Add(color);
+                        log += " Return " + color + " To Domain's " + Graph[i].Name + "\r\n";
+                    }
         }
     }
 }

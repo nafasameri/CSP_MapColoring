@@ -18,7 +18,7 @@ namespace CSP_MapColoring
         /// <returns>this color can be add to vertex?</returns>
         public bool CanColor(int vertex, Color color)
         {
-            if (Graph[vertex] == null)
+            if (Graph[vertex].color == Color.Snow)
                 return true;
             foreach (int adjCountry in Graph[vertex].Neighbors)
                 if (ColoredMap[adjCountry] == color)

@@ -40,7 +40,7 @@
             this.clbDomains.FormattingEnabled = true;
             this.clbDomains.Location = new System.Drawing.Point(2, 3);
             this.clbDomains.Name = "clbDomains";
-            this.clbDomains.Size = new System.Drawing.Size(208, 315);
+            this.clbDomains.Size = new System.Drawing.Size(248, 315);
             this.clbDomains.TabIndex = 1;
             // 
             // btnOk
@@ -68,9 +68,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(253, 371);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.clbDomains);
+            this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("Comic Sans MS", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(4);
