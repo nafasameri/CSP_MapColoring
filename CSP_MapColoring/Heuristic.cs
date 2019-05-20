@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
-using System.Threading.Tasks;
 
 namespace CSP_MapColoring
 {
@@ -18,8 +15,8 @@ namespace CSP_MapColoring
         /// <returns>this color can be add to vertex?</returns>
         public bool CanColor(int vertex, Color color)
         {
-            if (Graph[vertex].color == Color.Snow)
-                return true;
+            //if (Graph[vertex].color == Color.Empty)
+            //    return false;
             foreach (int adjCountry in Graph[vertex].Neighbors)
                 if (ColoredMap[adjCountry] == color)
                     return false;
@@ -53,7 +50,7 @@ namespace CSP_MapColoring
             {
                 int mrv = _NumberOfColors;
                 foreach (int adj in Graph[node].Neighbors)
-                    if (ColoredMap[adj] != null)
+                    if (ColoredMap[adj] != Color.Empty)
                         mrv--;
                 if (!mrvs.ContainsKey(node))
                     mrvs.Add(node, mrv);

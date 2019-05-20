@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Globalization;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
-
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace CSP_MapColoring
 {
@@ -77,32 +71,11 @@ namespace CSP_MapColoring
         {
             #region Defintion
             int len = 20;
-            string path = @"E:\New folder\20 LCV FC.txt";
             object[,] dateTimes = new object[len, (len * (len - 1)) / 2];
+            int[,] Ns = new int[len, (len * (len - 1)) / 2];
             Dictionary<int, Node> graph = new Dictionary<int, Node>();
             BackTracking backTracking = new BackTracking();
             Heuristic _heuristic = new Heuristic();
-            colors.Add(Color.MidnightBlue);
-            colors.Add(Color.IndianRed);
-            colors.Add(Color.Bisque);
-            colors.Add(Color.Violet);
-            colors.Add(Color.Tomato);
-            colors.Add(Color.MediumVioletRed);
-            colors.Add(Color.DarkKhaki);
-            colors.Add(Color.Lime);
-            colors.Add(Color.PaleGreen);
-            colors.Add(Color.PaleTurquoise);
-            colors.Add(Color.Khaki);
-            colors.Add(Color.DeepPink);
-            colors.Add(Color.Gold);
-            colors.Add(Color.Olive);
-            colors.Add(Color.Crimson);
-            colors.Add(Color.Linen);
-            colors.Add(Color.AntiqueWhite);
-            colors.Add(Color.Azure);
-            colors.Add(Color.Blue);
-            colors.Add(Color.Cornsilk);
-
             State = new bool[len, len];
             for (int i = 0; i < len; i++)
                 for (int j = 0; j < len; j++)
@@ -112,33 +85,64 @@ namespace CSP_MapColoring
             DateTime time = DateTime.Now;
             for (int i = 0; i < len; i++)
             {
-                graph.Add(i, new Node(i, Color.Snow, colors));
+                graph.Add(i, new Node(i, Color.Empty, colors));
 
                 for (int j = 0; j < (i * (i - 1)) / 2; j++) 
                 {
                     int row = random.Next(0, i);
                     int col = random.Next(0, i);
                     State[row, col] = State[col, row] = true;
-                    for (int k = 0; k < len; k++)
-                        State[k, k] = false;
 
                     Neighbors.Clear();
-                    for (int k = 0; k < len; k++)
+                    for (int k = 0; k < i; k++)
                     {
                         List<int> temp = new List<int>();
-                        for (int l = 0; l < len; l++)
-                            if (State[k, l])
+                        for (int l = 0; l < graph.Count; l++)
+                            if (State[k, l] && k != l) 
                                 temp.Add(l);
                         Neighbors.Add(k, temp);
-                    }
-                    for (int k = 0; k < i; k++)
                         graph[k].Neighbors = Neighbors[k];
+                    }
 
                     backTracking.Graph = _heuristic.Graph = graph;
                     backTracking.heuristic = _heuristic;
 
+                    #region colors
+                    colors.Clear();
+                    colors.Add(Color.MidnightBlue);
+                    colors.Add(Color.IndianRed);
+                    colors.Add(Color.Bisque);
+                    colors.Add(Color.Violet);
+                    colors.Add(Color.Tomato);
+                    colors.Add(Color.MediumVioletRed);
+                    colors.Add(Color.DarkKhaki);
+                    colors.Add(Color.Lime);
+                    colors.Add(Color.PaleGreen);
+                    colors.Add(Color.PaleTurquoise);
+                    colors.Add(Color.Khaki);
+                    colors.Add(Color.DeepPink);
+                    colors.Add(Color.Gold);
+                    colors.Add(Color.Olive);
+                    colors.Add(Color.Crimson);
+                    colors.Add(Color.Linen);
+                    colors.Add(Color.AntiqueWhite);
+                    colors.Add(Color.Azure);
+                    colors.Add(Color.Blue);
+                    colors.Add(Color.Cornsilk);
+                    colors.Add(Color.DarkMagenta);
+                    colors.Add(Color.DarkRed);
+                    colors.Add(Color.DarkOrchid);
+                    colors.Add(Color.DarkSlateGray);
+                    colors.Add(Color.DimGray);
+                    colors.Add(Color.FloralWhite);
+                    colors.Add(Color.Fuchsia);
+                    colors.Add(Color.Goldenrod);
+                    colors.Add(Color.Green);
+                    colors.Add(Color.HotPink);
+                    #endregion
+
                     start = DateTime.Now;
-                    backTracking.BT(colors, true, false, true, ref log);
+                    Ns[i, j] = backTracking.BT(colors, false, true, false, ref log);
                     finish = DateTime.Now;
                     dateTimes[i, j] = (finish - start);
                 }
@@ -146,18 +150,49 @@ namespace CSP_MapColoring
             DateTime time2 = DateTime.Now;
 
             #region write the file
-            File.WriteAllText(path, (time2 - time).ToString() + "\r\n\t");
+            /// times
+            string pathtext = @"E:\New folder\20 MRV MD time.txt";
+            File.WriteAllText(pathtext, (time2 - time).ToString() + "\r\n\t");
             for (int i = 0; i < len; i++)
-                File.AppendAllText(path, i.ToString() + "\t\t\t");
+                File.AppendAllText(pathtext, i.ToString() + "\t\t");
             for (int j = 0; j < (len * (len - 1)) / 2; j++)
             {
-                File.AppendAllText(path, "\r\n" + j.ToString());
+                File.AppendAllText(pathtext, "\r\n" + j.ToString());
                 for (int i = 0; i < len; i++)
                     if (dateTimes[i, j] != null)
-                        File.AppendAllText(path, "\t\t" + dateTimes[i, j].ToString());
+                        File.AppendAllText(pathtext, "\t" + dateTimes[i, j].ToString());
                     else
-                        File.AppendAllText(path, "\t\t00:00:00");
+                        File.AppendAllText(pathtext, "\t\t00:00:00");
             }
+
+            /// N
+            string pathN = @"E:\New folder\20 MRV Md N.txt";
+            File.WriteAllText(pathN, "");
+            for (int j = 0; j < (len * (len - 1)) / 2; j++)
+            {
+                for (int i = 0; i < len; i++)
+                    File.AppendAllText(pathN, Ns[i, j].ToString() + "\t");
+                File.AppendAllText(pathN, "\r\n");
+            }
+            #endregion
+
+            #region Write the file excel
+            //string pathExcel = @"E:\New folder\10.xlsx";
+            //Excel.Application xlApp = new Excel.Application();
+            //Excel.Workbook workbook = xlApp.Workbooks.Open(pathExcel);
+            //Excel._Worksheet sheet = workbook.Sheets[1];
+            //Excel.Range excelFile = sheet.UsedRange;
+            //for (int row = 0; row < len; row++)
+            //    for (int column = 0; column < (len * (len - 1)) / 2; column++)
+            //        excelFile.Cells[row, column].Value = dateTimes[row, column].ToString();
+            //workbook.Save();
+            //GC.Collect();
+            //GC.WaitForPendingFinalizers();
+            //Marshal.ReleaseComObject(excelFile);
+            //workbook.Close();
+            //Marshal.ReleaseComObject(workbook);
+            //xlApp.Quit();
+            //Marshal.ReleaseComObject(xlApp);
             #endregion
         }
         #endregion
@@ -281,11 +316,12 @@ namespace CSP_MapColoring
             {
                 cmbFromVertices.Items.AddRange(new object[] { i });
                 cmbToVertices.Items.AddRange(new object[] { i });
-                Graph.Add(i, new Node(i, Color.Snow, new List<Color>()));
+                Graph.Add(i, new Node(i, Color.Empty, new List<Color>()));
                 if (i < points.Length) Graph[i].point = points[i];
                 else if (i < 40) Graph[i].point = new Point(i, (i - points.Length) * 20);
                 else if (i < 70) Graph[i].point = new Point(i + 20, (i - 40) * 20);
-                else Graph[i].point = new Point(i + 20, (i - 70) * 20);
+                else if (i < 96) Graph[i].point = new Point(i + 20, (i - 70) * 20);
+                else Graph[i].point = new Point(100 + i, 100 + i);
             }
             grbNumOfVertices.Enabled = false;
             grbEdges.Enabled = grbSelectVar_Val.Enabled = true;
@@ -329,19 +365,11 @@ namespace CSP_MapColoring
         private void btnForwardChecking_Click(object sender, EventArgs e)
         {
             Begin();
-            //if (clbVar_Val.GetItemChecked(0) && clbVar_Val.GetItemChecked(1) && clbVar_Val.GetItemChecked(2))
-            //    BT.BT(colors, true, true, true, ref log);
-            //else
-            //{
-            //    if (clbVar_Val.GetItemChecked(0) && clbVar_Val.GetItemChecked(1)) BT.BT(colors, false, true, true, ref log);
-            //    else if (clbVar_Val.GetItemChecked(2)) BT.BT(colors, true, false, true, ref log);
-            //    else BT.BT(colors, false, false, true, ref log);
-            //}
             start = DateTime.Now;
             BT.BT(colors, clbVar_Val.GetItemChecked(2), clbVar_Val.GetItemChecked(1), true, ref log);
             finish = DateTime.Now;
             End();
-            log += (finish - start).Milliseconds.ToString();
+            rtbLog.Text += (finish - start).ToString();
         }
 
         private void btnBackTracking_Click(object sender, EventArgs e)
@@ -351,7 +379,7 @@ namespace CSP_MapColoring
             BT.BT(colors, clbVar_Val.GetItemChecked(2), clbVar_Val.GetItemChecked(1), false, ref log);
             finish = DateTime.Now;
             End();
-            log += (finish - start).Milliseconds.ToString();
+            rtbLog.Text += (finish - start).ToString();
         }
 
         private void btnRandomGenerateGraph_Click(object sender, EventArgs e)
