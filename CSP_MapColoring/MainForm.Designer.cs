@@ -38,8 +38,8 @@
             this.lblFrom = new System.Windows.Forms.Label();
             this.cmbToVertices = new System.Windows.Forms.ComboBox();
             this.cmbFromVertices = new System.Windows.Forms.ComboBox();
-            this.grbSelectVar_Val = new System.Windows.Forms.GroupBox();
-            this.clbVar_Val = new System.Windows.Forms.CheckedListBox();
+            this.grbSelectVariable = new System.Windows.Forms.GroupBox();
+            this.clbVariable = new System.Windows.Forms.CheckedListBox();
             this.grbNumOfVertices = new System.Windows.Forms.GroupBox();
             this.btnOk = new System.Windows.Forms.Button();
             this.txtNumOfVertices = new System.Windows.Forms.TextBox();
@@ -52,13 +52,19 @@
             this.btnBackTracking = new System.Windows.Forms.Button();
             this.btnArcConsistency = new System.Windows.Forms.Button();
             this.btnForwardChecking = new System.Windows.Forms.Button();
+            this.grbSelectValue = new System.Windows.Forms.GroupBox();
+            this.clbValue = new System.Windows.Forms.CheckedListBox();
+            this.rbtnEndToFirst = new System.Windows.Forms.RadioButton();
+            this.rbtnLCV = new System.Windows.Forms.RadioButton();
+            this.rbtnFirstToEnd = new System.Windows.Forms.RadioButton();
             this.tabControl.SuspendLayout();
             this.tabProblem.SuspendLayout();
             this.pnlProblem.SuspendLayout();
             this.grbEdges.SuspendLayout();
-            this.grbSelectVar_Val.SuspendLayout();
+            this.grbSelectVariable.SuspendLayout();
             this.grbNumOfVertices.SuspendLayout();
             this.tabResult.SuspendLayout();
+            this.grbSelectValue.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
@@ -76,8 +82,9 @@
             // 
             this.tabProblem.BackColor = System.Drawing.SystemColors.Control;
             this.tabProblem.Controls.Add(this.pnlProblem);
+            this.tabProblem.Controls.Add(this.grbSelectValue);
             this.tabProblem.Controls.Add(this.grbEdges);
-            this.tabProblem.Controls.Add(this.grbSelectVar_Val);
+            this.tabProblem.Controls.Add(this.grbSelectVariable);
             this.tabProblem.Controls.Add(this.grbNumOfVertices);
             this.tabProblem.ForeColor = System.Drawing.Color.Black;
             this.tabProblem.Location = new System.Drawing.Point(4, 27);
@@ -92,10 +99,14 @@
             // 
             this.pnlProblem.BackColor = System.Drawing.SystemColors.Control;
             this.pnlProblem.Controls.Add(this.btnRandomGenerateGraph);
+            this.pnlProblem.Controls.Add(this.clbValue);
             this.pnlProblem.Location = new System.Drawing.Point(238, 8);
             this.pnlProblem.Name = "pnlProblem";
             this.pnlProblem.Size = new System.Drawing.Size(732, 511);
             this.pnlProblem.TabIndex = 12;
+            this.pnlProblem.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mouseDown);
+            this.pnlProblem.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mouseMove);
+            this.pnlProblem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mouseUp);
             // 
             // btnRandomGenerateGraph
             // 
@@ -116,7 +127,7 @@
             this.grbEdges.Controls.Add(this.cmbToVertices);
             this.grbEdges.Controls.Add(this.cmbFromVertices);
             this.grbEdges.Enabled = false;
-            this.grbEdges.Location = new System.Drawing.Point(8, 196);
+            this.grbEdges.Location = new System.Drawing.Point(8, 161);
             this.grbEdges.Name = "grbEdges";
             this.grbEdges.Size = new System.Drawing.Size(224, 174);
             this.grbEdges.TabIndex = 2;
@@ -170,30 +181,29 @@
             this.cmbFromVertices.Size = new System.Drawing.Size(121, 26);
             this.cmbFromVertices.TabIndex = 0;
             // 
-            // grbSelectVar_Val
+            // grbSelectVariable
             // 
-            this.grbSelectVar_Val.Controls.Add(this.clbVar_Val);
-            this.grbSelectVar_Val.Enabled = false;
-            this.grbSelectVar_Val.Location = new System.Drawing.Point(8, 390);
-            this.grbSelectVar_Val.Name = "grbSelectVar_Val";
-            this.grbSelectVar_Val.Size = new System.Drawing.Size(224, 129);
-            this.grbSelectVar_Val.TabIndex = 3;
-            this.grbSelectVar_Val.TabStop = false;
-            this.grbSelectVar_Val.Text = "Select Variable, Value";
+            this.grbSelectVariable.Controls.Add(this.clbVariable);
+            this.grbSelectVariable.Enabled = false;
+            this.grbSelectVariable.Location = new System.Drawing.Point(8, 342);
+            this.grbSelectVariable.Name = "grbSelectVariable";
+            this.grbSelectVariable.Size = new System.Drawing.Size(224, 81);
+            this.grbSelectVariable.TabIndex = 3;
+            this.grbSelectVariable.TabStop = false;
+            this.grbSelectVariable.Text = "Select Variable";
             // 
-            // clbVar_Val
+            // clbVariable
             // 
-            this.clbVar_Val.CheckOnClick = true;
-            this.clbVar_Val.FormattingEnabled = true;
-            this.clbVar_Val.Items.AddRange(new object[] {
+            this.clbVariable.CheckOnClick = true;
+            this.clbVariable.FormattingEnabled = true;
+            this.clbVariable.Items.AddRange(new object[] {
             "MRV",
-            "Most Degree",
-            "LCV"});
-            this.clbVar_Val.Location = new System.Drawing.Point(3, 28);
-            this.clbVar_Val.Name = "clbVar_Val";
-            this.clbVar_Val.Size = new System.Drawing.Size(218, 88);
-            this.clbVar_Val.TabIndex = 0;
-            this.clbVar_Val.SelectedIndexChanged += new System.EventHandler(this.clbVar_Val_SelectedIndexChanged);
+            "Most Degree"});
+            this.clbVariable.Location = new System.Drawing.Point(3, 28);
+            this.clbVariable.Name = "clbVariable";
+            this.clbVariable.Size = new System.Drawing.Size(218, 46);
+            this.clbVariable.TabIndex = 0;
+            this.clbVariable.SelectedIndexChanged += new System.EventHandler(this.clbVar_Val_SelectedIndexChanged);
             // 
             // grbNumOfVertices
             // 
@@ -201,7 +211,7 @@
             this.grbNumOfVertices.Controls.Add(this.txtNumOfVertices);
             this.grbNumOfVertices.Location = new System.Drawing.Point(8, 7);
             this.grbNumOfVertices.Name = "grbNumOfVertices";
-            this.grbNumOfVertices.Size = new System.Drawing.Size(224, 166);
+            this.grbNumOfVertices.Size = new System.Drawing.Size(224, 149);
             this.grbNumOfVertices.TabIndex = 6;
             this.grbNumOfVertices.TabStop = false;
             this.grbNumOfVertices.Text = "Vertices";
@@ -322,6 +332,65 @@
             this.btnForwardChecking.UseVisualStyleBackColor = true;
             this.btnForwardChecking.Click += new System.EventHandler(this.btnForwardChecking_Click);
             // 
+            // grbSelectValue
+            // 
+            this.grbSelectValue.Controls.Add(this.rbtnFirstToEnd);
+            this.grbSelectValue.Controls.Add(this.rbtnLCV);
+            this.grbSelectValue.Controls.Add(this.rbtnEndToFirst);
+            this.grbSelectValue.Enabled = false;
+            this.grbSelectValue.Location = new System.Drawing.Point(8, 432);
+            this.grbSelectValue.Name = "grbSelectValue";
+            this.grbSelectValue.Size = new System.Drawing.Size(224, 84);
+            this.grbSelectValue.TabIndex = 13;
+            this.grbSelectValue.TabStop = false;
+            this.grbSelectValue.Text = "Select Value";
+            // 
+            // clbValue
+            // 
+            this.clbValue.CheckOnClick = true;
+            this.clbValue.FormattingEnabled = true;
+            this.clbValue.Items.AddRange(new object[] {
+            "End To First",
+            "LCV"});
+            this.clbValue.Location = new System.Drawing.Point(3, 462);
+            this.clbValue.Name = "clbValue";
+            this.clbValue.Size = new System.Drawing.Size(218, 46);
+            this.clbValue.TabIndex = 0;
+            this.clbValue.Visible = false;
+            // 
+            // rbtnEndToFirst
+            // 
+            this.rbtnEndToFirst.AutoSize = true;
+            this.rbtnEndToFirst.Location = new System.Drawing.Point(6, 41);
+            this.rbtnEndToFirst.Name = "rbtnEndToFirst";
+            this.rbtnEndToFirst.Size = new System.Drawing.Size(102, 22);
+            this.rbtnEndToFirst.TabIndex = 1;
+            this.rbtnEndToFirst.TabStop = true;
+            this.rbtnEndToFirst.Text = "End To First";
+            this.rbtnEndToFirst.UseVisualStyleBackColor = true;
+            // 
+            // rbtnLCV
+            // 
+            this.rbtnLCV.AutoSize = true;
+            this.rbtnLCV.Location = new System.Drawing.Point(6, 61);
+            this.rbtnLCV.Name = "rbtnLCV";
+            this.rbtnLCV.Size = new System.Drawing.Size(49, 22);
+            this.rbtnLCV.TabIndex = 2;
+            this.rbtnLCV.TabStop = true;
+            this.rbtnLCV.Text = "LCV";
+            this.rbtnLCV.UseVisualStyleBackColor = true;
+            // 
+            // rbtnFirstToEnd
+            // 
+            this.rbtnFirstToEnd.AutoSize = true;
+            this.rbtnFirstToEnd.Location = new System.Drawing.Point(6, 21);
+            this.rbtnFirstToEnd.Name = "rbtnFirstToEnd";
+            this.rbtnFirstToEnd.Size = new System.Drawing.Size(102, 22);
+            this.rbtnFirstToEnd.TabIndex = 3;
+            this.rbtnFirstToEnd.TabStop = true;
+            this.rbtnFirstToEnd.Text = "First To End";
+            this.rbtnFirstToEnd.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
@@ -347,11 +416,13 @@
             this.pnlProblem.ResumeLayout(false);
             this.grbEdges.ResumeLayout(false);
             this.grbEdges.PerformLayout();
-            this.grbSelectVar_Val.ResumeLayout(false);
+            this.grbSelectVariable.ResumeLayout(false);
             this.grbNumOfVertices.ResumeLayout(false);
             this.grbNumOfVertices.PerformLayout();
             this.tabResult.ResumeLayout(false);
             this.tabResult.PerformLayout();
+            this.grbSelectValue.ResumeLayout(false);
+            this.grbSelectValue.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -362,8 +433,8 @@
         private System.Windows.Forms.TabPage tabProblem;
         private System.Windows.Forms.TabPage tabResult;
         private System.Windows.Forms.Button btnDomains;
-        private System.Windows.Forms.GroupBox grbSelectVar_Val;
-        private System.Windows.Forms.CheckedListBox clbVar_Val;
+        private System.Windows.Forms.GroupBox grbSelectVariable;
+        private System.Windows.Forms.CheckedListBox clbVariable;
         private System.Windows.Forms.TextBox txtNumOfVertices;
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.Label lblLog;
@@ -382,6 +453,11 @@
         private System.Windows.Forms.Button btnForwardChecking;
         private System.Windows.Forms.Button btnRandomGenerateGraph;
         private System.Windows.Forms.Panel pnlProblem;
+        private System.Windows.Forms.GroupBox grbSelectValue;
+        private System.Windows.Forms.CheckedListBox clbValue;
+        private System.Windows.Forms.RadioButton rbtnEndToFirst;
+        private System.Windows.Forms.RadioButton rbtnLCV;
+        private System.Windows.Forms.RadioButton rbtnFirstToEnd;
     }
 }
 

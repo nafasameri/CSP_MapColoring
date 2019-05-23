@@ -87,7 +87,7 @@ namespace CSP_MapColoring
             {
                 graph.Add(i, new Node(i, Color.Empty, colors));
 
-                for (int j = 0; j < (i * (i - 1)) / 2; j++) 
+                for (int j = 0; j < (i * (i - 1)) / 2; j++)
                 {
                     int row = random.Next(0, i);
                     int col = random.Next(0, i);
@@ -98,7 +98,7 @@ namespace CSP_MapColoring
                     {
                         List<int> temp = new List<int>();
                         for (int l = 0; l < graph.Count; l++)
-                            if (State[k, l] && k != l) 
+                            if (State[k, l] && k != l)
                                 temp.Add(l);
                         Neighbors.Add(k, temp);
                         graph[k].Neighbors = Neighbors[k];
@@ -142,7 +142,7 @@ namespace CSP_MapColoring
                     #endregion
 
                     start = DateTime.Now;
-                    Ns[i, j] = backTracking.BT(colors, false, true, false, ref log);
+                    Ns[i, j] = backTracking.BT(colors, false, false, true, false, ref log);
                     finish = DateTime.Now;
                     dateTimes[i, j] = (finish - start);
                 }
@@ -233,6 +233,7 @@ namespace CSP_MapColoring
                 dragingPoint.X = e.X;
                 dragingPoint.Y = e.Y;
                 Graph[dragingPointIndex].point = dragingPoint;
+                Draw(pnlProblem);
                 Draw(pnlResult);
             }
         }
@@ -324,7 +325,7 @@ namespace CSP_MapColoring
                 else Graph[i].point = new Point(100 + i, 100 + i);
             }
             grbNumOfVertices.Enabled = false;
-            grbEdges.Enabled = grbSelectVar_Val.Enabled = true;
+            grbEdges.Enabled = grbSelectVariable.Enabled = grbSelectValue.Enabled = true;
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -350,15 +351,15 @@ namespace CSP_MapColoring
 
         private void clbVar_Val_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (clbVar_Val.GetItemCheckState(0) == CheckState.Checked || clbVar_Val.GetItemCheckState(1) == CheckState.Checked)
+            if (clbVariable.GetItemCheckState(0) == CheckState.Checked || clbVariable.GetItemCheckState(1) == CheckState.Checked)
             {
-                clbVar_Val.SetItemCheckState(1, CheckState.Checked);
-                clbVar_Val.SetItemCheckState(0, CheckState.Checked);
+                clbVariable.SetItemCheckState(1, CheckState.Checked);
+                clbVariable.SetItemCheckState(0, CheckState.Checked);
             }
-            if (clbVar_Val.GetItemCheckState(0) == CheckState.Unchecked || clbVar_Val.GetItemCheckState(1) == CheckState.Unchecked)
+            if (clbVariable.GetItemCheckState(0) == CheckState.Unchecked || clbVariable.GetItemCheckState(1) == CheckState.Unchecked)
             {
-                clbVar_Val.SetItemCheckState(1, CheckState.Unchecked);
-                clbVar_Val.SetItemCheckState(0, CheckState.Unchecked);
+                clbVariable.SetItemCheckState(1, CheckState.Unchecked);
+                clbVariable.SetItemCheckState(0, CheckState.Unchecked);
             }
         }
 
@@ -366,7 +367,8 @@ namespace CSP_MapColoring
         {
             Begin();
             start = DateTime.Now;
-            BT.BT(colors, clbVar_Val.GetItemChecked(2), clbVar_Val.GetItemChecked(1), true, ref log);
+            //BT.BT(colors, clbValue.GetItemChecked(0), clbValue.GetItemChecked(1), clbVariable.GetItemChecked(1), true, ref log);
+            BT.BT(colors, rbtnEndToFirst.Checked, rbtnLCV.Checked, clbVariable.GetItemChecked(1), true, ref log);
             finish = DateTime.Now;
             End();
             rtbLog.Text += (finish - start).ToString();
@@ -376,7 +378,7 @@ namespace CSP_MapColoring
         {
             Begin();
             start = DateTime.Now;
-            BT.BT(colors, clbVar_Val.GetItemChecked(2), clbVar_Val.GetItemChecked(1), false, ref log);
+            BT.BT(colors, rbtnEndToFirst.Checked, rbtnLCV.Checked, clbVariable.GetItemChecked(1), false, ref log);
             finish = DateTime.Now;
             End();
             rtbLog.Text += (finish - start).ToString();
