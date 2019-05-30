@@ -1,4 +1,4 @@
-﻿namespace CSP_MapColoring
+namespace CSP_MapColoring
 {
     partial class DomainsForm
     {
@@ -46,7 +46,7 @@
             // btnOk
             // 
             this.btnOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnOk.Location = new System.Drawing.Point(149, 328);
+            this.btnOk.Location = new System.Drawing.Point(158, 324);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(92, 37);
             this.btnOk.TabIndex = 2;
@@ -67,7 +67,7 @@
             this.AcceptButton = this.btnOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(253, 371);
+            this.ClientSize = new System.Drawing.Size(253, 365);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.clbDomains);
             this.Controls.Add(this.panel1);

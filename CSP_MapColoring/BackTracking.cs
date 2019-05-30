@@ -19,11 +19,11 @@ namespace CSP_MapColoring
         /// <param name="vertex">Vertex selected</param>
         /// <param name="log">message coloring</param>
         /// <param name="index">index color</param>
-        private void Coloring(int vertex, bool EndToFirst, int index, ref string log)
+        private void Coloring(int vertex, List<Color> colors, bool EndToFirst, bool LCV, bool MRV, bool FC, ref string log, int index)
         {
             N++;
             log += " Select " + vertex.ToString() + " " + ColoredMap[vertex].ToString() + "\r\n";
-
+            
             if (heuristic.CanColor(vertex, ColoredMap[vertex]))
                 log += " Add " + vertex.ToString() + " " + ColoredMap[vertex].ToString() + "\r\n";
             else
@@ -31,14 +31,14 @@ namespace CSP_MapColoring
                 log += " Delete " + vertex.ToString() + " " + ColoredMap[vertex].ToString() + "\r\n";
                 try { ColoredMap[vertex] = Graph[vertex].domain[index]; } catch { }
                 if (EndToFirst && index >= 0)
-                    Coloring(vertex, EndToFirst, --index, ref log);
+                    Coloring(vertex, colors, EndToFirst, LCV, MRV, FC, ref log, --index);
                 else if (!EndToFirst && index < Graph[vertex].domain.Count)
-                    Coloring(vertex, EndToFirst, ++index, ref log);
+                    Coloring(vertex, colors, EndToFirst, LCV, MRV, FC, ref log, ++index);
                 else
                 {
                     ColoredMap[vertex] = Color.Empty;
-                    //log += "CSP not be Solve!\r\n";
-                    //DFS
+                    Graph[_Visited[_Visited.Count - 1]].domain.Remove(ColoredMap[_Visited[_Visited.Count - 1]]);
+                    DFS(_Visited[_Visited.Count - 1], colors, EndToFirst, LCV, MRV, FC, ref log);
                     return;
                 }
             }
@@ -57,18 +57,18 @@ namespace CSP_MapColoring
         /// <param name="heuristicMRV">flg mrv</param>
         /// <param name="FC">flg forward checking</param>
         /// <param name="log">message coloring</param>
-        private void DFS(int parent, int vertex, List<Color> colors, bool EndToFirst, bool heuristicLCV, bool heuristicMRV, bool FC, ref string log)
+        private void DFS(int vertex, List<Color> colors, bool EndToFirst, bool LCV, bool MRV, bool FC, ref string log)
         {
             _Visited.Add(vertex);
-            if (heuristicLCV) ColoredMap[vertex] = heuristic.GetLCV(vertex, colors);
+            if (LCV) ColoredMap[vertex] = heuristic.GetLCV(vertex, colors);
             else if (EndToFirst) try { ColoredMap[vertex] = Graph[vertex].domain[Graph[vertex].domain.Count - 1]; } catch { }
             else try { ColoredMap[vertex] = Graph[vertex].domain[0]; } catch { }
 
             if (ColoredMap[vertex] != Color.Empty)
                 if (EndToFirst)
-                    Coloring(vertex, EndToFirst, Graph[vertex].domain.Count - 2, ref log);
+                    Coloring(vertex, colors, EndToFirst, LCV, MRV, FC, ref log, Graph[vertex].domain.Count - 2);
                 else
-                    Coloring(vertex, EndToFirst, 1, ref log);
+                    Coloring(vertex, colors, EndToFirst, LCV, MRV, FC, ref log, 1);
             else
             {
                 log += " Select " + vertex.ToString() + " " + ColoredMap[vertex].ToString() + "\r\n";
@@ -79,32 +79,30 @@ namespace CSP_MapColoring
 
             if (FC)
                 if (!ForwardChecking(Graph[vertex], ColoredMap[vertex], ref log))
-                {
                     if (!OK.Contains(vertex))
                     {
                         DisFC(Graph[vertex], ColoredMap[vertex], ref log);
                         //Graph[vertex].domain.Remove(ColoredMap[vertex]);
-                        DFS(parent, vertex, colors, EndToFirst, heuristicLCV, heuristicMRV, FC, ref log);
+                       // DFS(parent, colors, EndToFirst, heuristicLCV, heuristicMRV, FC, ref log);
                     }
-                }
 
             object adjList;
-            if (heuristicMRV)
+            if (MRV)
             {
                 adjList = heuristic.GetMRV(vertex).OrderByDescending(v => heuristic.GetDegree(v));
                 foreach (int next in (IOrderedEnumerable<int>)adjList)
                     if (!_Visited.Contains(next))
-                        DFS(vertex, next, colors, EndToFirst, heuristicLCV, heuristicMRV, FC, ref log);
+                        DFS(next, colors, EndToFirst, LCV, MRV, FC, ref log);
             }
             else
             {
                 //adjList = Graph.Keys;
-                ArrayList list = new ArrayList();
-                for (int i = 0; i < Graph.Count; i++)
-                    list.Add(i);
-                foreach (int next in list)
+                //ArrayList list = new ArrayList();
+                //for (int i = 0; i < Graph.Count; i++)
+                //    list.Add(i);
+                foreach (int next in Graph.Keys)
                     if (!_Visited.Contains(next))
-                        DFS(vertex, next, colors, EndToFirst, heuristicLCV, heuristicMRV, FC, ref log);
+                        DFS(next, colors, EndToFirst, LCV, MRV, FC, ref log);
             }
         }
 
@@ -119,7 +117,7 @@ namespace CSP_MapColoring
         /// <param name="heuristicMRV">flg mrv</param>
         /// <param name="FC">flg forward checking</param>
         /// <param name="log">message coloring</param>
-        public int BT(List<Color> colors, bool EndToFirst, bool heuristicLCV, bool heuristicMRV, bool FC, ref string log)
+        public int BT(List<Color> colors, bool EndToFirst, bool LCV, bool MRV, bool FC, ref string log)
         {
             N = 0;
             if (ColoredMap != null) ColoredMap.Clear();
@@ -134,7 +132,7 @@ namespace CSP_MapColoring
 
             foreach (int key in Graph.Keys)
                 if (!_Visited.Contains(key))
-                    DFS(key, key, colors, EndToFirst, heuristicLCV, heuristicMRV, FC, ref log);
+                    DFS(key, colors, EndToFirst, LCV, MRV, FC, ref log);
 
             log += " N = " + N.ToString() + "\r\n";
             _Visited.Clear();

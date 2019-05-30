@@ -87,7 +87,7 @@ namespace CSP_MapColoring
                         if (ColoredMap[adj] == color)
                             total++;
                 }
-                if (isSafeColor)
+                if (isSafeColor && !lcvs.ContainsKey(color))
                     lcvs.Add(color, total);
             }
 

@@ -15,15 +15,15 @@ namespace CSP_MapColoring
         private bool[,] State;
         Graphics g;
         DomainsForm frmDomains;
+        DateTime start = new DateTime();
+        DateTime finish = new DateTime();
         Dictionary<int, Node> Graph = new Dictionary<int, Node>();
         Dictionary<int, List<int>> Neighbors = new Dictionary<int, List<int>>();
         List<Color> colors = new List<Color>();
         BackTracking BT = new BackTracking();
         Heuristic heuristic = new Heuristic();
         Random random = new Random();
-        DateTime start = new DateTime();
-        DateTime finish = new DateTime();
-
+        
 
         #region Method's
         public MainForm()
@@ -63,7 +63,12 @@ namespace CSP_MapColoring
             for (int i = 0; i < NumOfVertices; i++)
                 Graph[i].color = BT.ColoredMap[i];
             Draw(pnlResult);
-            rtbLog.Text += "End Of Solving CSP.\r\n";
+            bool Solved = true;
+            for (int i = 0; i < NumOfVertices; i++)
+                if (Graph[i].color == Color.Empty)
+                    Solved = false;
+            if (Solved) rtbLog.Text += "End Of Solving CSP.\r\n";
+            else rtbLog.Text += "CSP not be Solved.\r\n";
             //if (colors.Count < Vertices.Count){rtbLog.Text = "CSP not be Solve!";return;}else
         }
 
@@ -80,18 +85,48 @@ namespace CSP_MapColoring
             for (int i = 0; i < len; i++)
                 for (int j = 0; j < len; j++)
                     State[i, j] = false;
+            int row, col;
+            object[] obj = new object[]
+            {
+                Color.MidnightBlue,
+                Color.IndianRed,
+                Color.Bisque,
+                Color.Violet,
+                Color.Tomato,
+                Color.MediumVioletRed,
+                Color.DarkKhaki,
+                Color.Lime,
+                Color.PaleGreen,
+                Color.PaleTurquoise,
+                Color.Khaki,
+                Color.DeepPink,
+                Color.Gold,
+                Color.Olive,
+                Color.Crimson,
+                Color.MediumPurple,
+                Color.MediumSeaGreen,
+                Color.MediumSlateBlue,
+                Color.MediumSpringGreen,
+                Color.MediumTurquoise
+            };
             #endregion
 
             DateTime time = DateTime.Now;
             for (int i = 0; i < len; i++)
             {
                 graph.Add(i, new Node(i, Color.Empty, colors));
+                for (int l = 0; l < i; l++)
+                    for (int j = 0; j < i; j++)
+                        State[l, j] = false;
 
                 for (int j = 0; j < (i * (i - 1)) / 2; j++)
                 {
-                    int row = random.Next(0, i);
-                    int col = random.Next(0, i);
-                    State[row, col] = State[col, row] = true;
+                    do
+                    {
+                        row = random.Next(0, i);
+                        col = random.Next(0, i);
+                        State[row, col] = State[col, row] = true;
+                    } while (!State[row, col]);
 
                     Neighbors.Clear();
                     for (int k = 0; k < i; k++)
@@ -107,42 +142,12 @@ namespace CSP_MapColoring
                     backTracking.Graph = _heuristic.Graph = graph;
                     backTracking.heuristic = _heuristic;
 
-                    #region colors
                     colors.Clear();
-                    colors.Add(Color.MidnightBlue);
-                    colors.Add(Color.IndianRed);
-                    colors.Add(Color.Bisque);
-                    colors.Add(Color.Violet);
-                    colors.Add(Color.Tomato);
-                    colors.Add(Color.MediumVioletRed);
-                    colors.Add(Color.DarkKhaki);
-                    colors.Add(Color.Lime);
-                    colors.Add(Color.PaleGreen);
-                    colors.Add(Color.PaleTurquoise);
-                    colors.Add(Color.Khaki);
-                    colors.Add(Color.DeepPink);
-                    colors.Add(Color.Gold);
-                    colors.Add(Color.Olive);
-                    colors.Add(Color.Crimson);
-                    colors.Add(Color.Linen);
-                    colors.Add(Color.AntiqueWhite);
-                    colors.Add(Color.Azure);
-                    colors.Add(Color.Blue);
-                    colors.Add(Color.Cornsilk);
-                    colors.Add(Color.DarkMagenta);
-                    colors.Add(Color.DarkRed);
-                    colors.Add(Color.DarkOrchid);
-                    colors.Add(Color.DarkSlateGray);
-                    colors.Add(Color.DimGray);
-                    colors.Add(Color.FloralWhite);
-                    colors.Add(Color.Fuchsia);
-                    colors.Add(Color.Goldenrod);
-                    colors.Add(Color.Green);
-                    colors.Add(Color.HotPink);
-                    #endregion
+                    for (int c = 0; c < i; c++)
+                        colors.Add((Color)obj[c]);
 
                     start = DateTime.Now;
-                    Ns[i, j] = backTracking.BT(colors, false, false, true, false, ref log);
+                    Ns[i, j] = backTracking.BT(colors, false, true, true, false, ref log);
                     finish = DateTime.Now;
                     dateTimes[i, j] = (finish - start);
                 }
@@ -151,7 +156,7 @@ namespace CSP_MapColoring
 
             #region write the file
             /// times
-            string pathtext = @"E:\New folder\20 MRV MD time.txt";
+            string pathtext = @"E:\AI\20 LCV time.txt";
             File.WriteAllText(pathtext, (time2 - time).ToString() + "\r\n\t");
             for (int i = 0; i < len; i++)
                 File.AppendAllText(pathtext, i.ToString() + "\t\t");
@@ -166,7 +171,7 @@ namespace CSP_MapColoring
             }
 
             /// N
-            string pathN = @"E:\New folder\20 MRV Md N.txt";
+            string pathN = @"E:\AI\20 LCV N.txt";
             File.WriteAllText(pathN, "");
             for (int j = 0; j < (len * (len - 1)) / 2; j++)
             {
@@ -177,14 +182,14 @@ namespace CSP_MapColoring
             #endregion
 
             #region Write the file excel
-            //string pathExcel = @"E:\New folder\10.xlsx";
+            //string pathExcel = @"E:\New folder\20.xlsx";
             //Excel.Application xlApp = new Excel.Application();
             //Excel.Workbook workbook = xlApp.Workbooks.Open(pathExcel);
             //Excel._Worksheet sheet = workbook.Sheets[1];
             //Excel.Range excelFile = sheet.UsedRange;
             //for (int row = 0; row < len; row++)
             //    for (int column = 0; column < (len * (len - 1)) / 2; column++)
-            //        excelFile.Cells[row, column].Value = dateTimes[row, column].ToString();
+            //        excelFile.Cells[row, column].Value = "333";//dateTimes[row, column].ToString();
             //workbook.Save();
             //GC.Collect();
             //GC.WaitForPendingFinalizers();
@@ -319,10 +324,10 @@ namespace CSP_MapColoring
                 cmbToVertices.Items.AddRange(new object[] { i });
                 Graph.Add(i, new Node(i, Color.Empty, new List<Color>()));
                 if (i < points.Length) Graph[i].point = points[i];
-                else if (i < 40) Graph[i].point = new Point(i, (i - points.Length) * 20);
-                else if (i < 70) Graph[i].point = new Point(i + 20, (i - 40) * 20);
-                else if (i < 96) Graph[i].point = new Point(i + 20, (i - 70) * 20);
-                else Graph[i].point = new Point(100 + i, 100 + i);
+                else if (i < 41) Graph[i].point = new Point(i, (i - points.Length) * 20);
+                else if (i < 71) Graph[i].point = new Point(i + 20, (i - 40) * 20);
+                else if (i < 97) Graph[i].point = new Point(i + 20, (i - 70) * 20);
+                else Graph[i].point = new Point(50 + i, 50 + i);
             }
             grbNumOfVertices.Enabled = false;
             grbEdges.Enabled = grbSelectVariable.Enabled = grbSelectValue.Enabled = true;

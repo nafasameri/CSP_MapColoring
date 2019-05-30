@@ -1,4 +1,4 @@
-﻿namespace CSP_MapColoring
+namespace CSP_MapColoring
 {
     partial class MainForm
     {
@@ -32,6 +32,10 @@
             this.tabProblem = new System.Windows.Forms.TabPage();
             this.pnlProblem = new System.Windows.Forms.Panel();
             this.btnRandomGenerateGraph = new System.Windows.Forms.Button();
+            this.grbSelectValue = new System.Windows.Forms.GroupBox();
+            this.rbtnFirstToEnd = new System.Windows.Forms.RadioButton();
+            this.rbtnLCV = new System.Windows.Forms.RadioButton();
+            this.rbtnEndToFirst = new System.Windows.Forms.RadioButton();
             this.grbEdges = new System.Windows.Forms.GroupBox();
             this.btnOKEdge = new System.Windows.Forms.Button();
             this.lblTo = new System.Windows.Forms.Label();
@@ -52,19 +56,14 @@
             this.btnBackTracking = new System.Windows.Forms.Button();
             this.btnArcConsistency = new System.Windows.Forms.Button();
             this.btnForwardChecking = new System.Windows.Forms.Button();
-            this.grbSelectValue = new System.Windows.Forms.GroupBox();
-            this.clbValue = new System.Windows.Forms.CheckedListBox();
-            this.rbtnEndToFirst = new System.Windows.Forms.RadioButton();
-            this.rbtnLCV = new System.Windows.Forms.RadioButton();
-            this.rbtnFirstToEnd = new System.Windows.Forms.RadioButton();
             this.tabControl.SuspendLayout();
             this.tabProblem.SuspendLayout();
             this.pnlProblem.SuspendLayout();
+            this.grbSelectValue.SuspendLayout();
             this.grbEdges.SuspendLayout();
             this.grbSelectVariable.SuspendLayout();
             this.grbNumOfVertices.SuspendLayout();
             this.tabResult.SuspendLayout();
-            this.grbSelectValue.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
@@ -99,7 +98,6 @@
             // 
             this.pnlProblem.BackColor = System.Drawing.SystemColors.Control;
             this.pnlProblem.Controls.Add(this.btnRandomGenerateGraph);
-            this.pnlProblem.Controls.Add(this.clbValue);
             this.pnlProblem.Location = new System.Drawing.Point(238, 8);
             this.pnlProblem.Name = "pnlProblem";
             this.pnlProblem.Size = new System.Drawing.Size(732, 511);
@@ -119,6 +117,55 @@
             this.btnRandomGenerateGraph.UseVisualStyleBackColor = true;
             this.btnRandomGenerateGraph.Click += new System.EventHandler(this.btnRandomGenerateGraph_Click);
             // 
+            // grbSelectValue
+            // 
+            this.grbSelectValue.Controls.Add(this.rbtnFirstToEnd);
+            this.grbSelectValue.Controls.Add(this.rbtnLCV);
+            this.grbSelectValue.Controls.Add(this.rbtnEndToFirst);
+            this.grbSelectValue.Enabled = false;
+            this.grbSelectValue.Location = new System.Drawing.Point(8, 429);
+            this.grbSelectValue.Name = "grbSelectValue";
+            this.grbSelectValue.Size = new System.Drawing.Size(224, 90);
+            this.grbSelectValue.TabIndex = 13;
+            this.grbSelectValue.TabStop = false;
+            this.grbSelectValue.Text = "Select Value";
+            // 
+            // rbtnFirstToEnd
+            // 
+            this.rbtnFirstToEnd.AutoSize = true;
+            this.rbtnFirstToEnd.Location = new System.Drawing.Point(12, 23);
+            this.rbtnFirstToEnd.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.rbtnFirstToEnd.Name = "rbtnFirstToEnd";
+            this.rbtnFirstToEnd.Size = new System.Drawing.Size(102, 22);
+            this.rbtnFirstToEnd.TabIndex = 3;
+            this.rbtnFirstToEnd.TabStop = true;
+            this.rbtnFirstToEnd.Text = "First To End";
+            this.rbtnFirstToEnd.UseVisualStyleBackColor = true;
+            // 
+            // rbtnLCV
+            // 
+            this.rbtnLCV.AutoSize = true;
+            this.rbtnLCV.Location = new System.Drawing.Point(12, 63);
+            this.rbtnLCV.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.rbtnLCV.Name = "rbtnLCV";
+            this.rbtnLCV.Size = new System.Drawing.Size(49, 22);
+            this.rbtnLCV.TabIndex = 2;
+            this.rbtnLCV.TabStop = true;
+            this.rbtnLCV.Text = "LCV";
+            this.rbtnLCV.UseVisualStyleBackColor = true;
+            // 
+            // rbtnEndToFirst
+            // 
+            this.rbtnEndToFirst.AutoSize = true;
+            this.rbtnEndToFirst.Location = new System.Drawing.Point(12, 43);
+            this.rbtnEndToFirst.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.rbtnEndToFirst.Name = "rbtnEndToFirst";
+            this.rbtnEndToFirst.Size = new System.Drawing.Size(102, 22);
+            this.rbtnEndToFirst.TabIndex = 1;
+            this.rbtnEndToFirst.TabStop = true;
+            this.rbtnEndToFirst.Text = "End To First";
+            this.rbtnEndToFirst.UseVisualStyleBackColor = true;
+            // 
             // grbEdges
             // 
             this.grbEdges.Controls.Add(this.btnOKEdge);
@@ -137,7 +184,7 @@
             // btnOKEdge
             // 
             this.btnOKEdge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnOKEdge.Location = new System.Drawing.Point(52, 122);
+            this.btnOKEdge.Location = new System.Drawing.Point(104, 122);
             this.btnOKEdge.Name = "btnOKEdge";
             this.btnOKEdge.Size = new System.Drawing.Size(92, 37);
             this.btnOKEdge.TabIndex = 0;
@@ -203,7 +250,6 @@
             this.clbVariable.Name = "clbVariable";
             this.clbVariable.Size = new System.Drawing.Size(218, 46);
             this.clbVariable.TabIndex = 0;
-            this.clbVariable.SelectedIndexChanged += new System.EventHandler(this.clbVar_Val_SelectedIndexChanged);
             // 
             // grbNumOfVertices
             // 
@@ -219,7 +265,7 @@
             // btnOk
             // 
             this.btnOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnOk.Location = new System.Drawing.Point(55, 88);
+            this.btnOk.Location = new System.Drawing.Point(104, 88);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(92, 37);
             this.btnOk.TabIndex = 1;
@@ -229,9 +275,9 @@
             // 
             // txtNumOfVertices
             // 
-            this.txtNumOfVertices.Location = new System.Drawing.Point(36, 45);
+            this.txtNumOfVertices.Location = new System.Drawing.Point(26, 45);
             this.txtNumOfVertices.Name = "txtNumOfVertices";
-            this.txtNumOfVertices.Size = new System.Drawing.Size(131, 26);
+            this.txtNumOfVertices.Size = new System.Drawing.Size(170, 26);
             this.txtNumOfVertices.TabIndex = 0;
             // 
             // tabResult
@@ -332,65 +378,6 @@
             this.btnForwardChecking.UseVisualStyleBackColor = true;
             this.btnForwardChecking.Click += new System.EventHandler(this.btnForwardChecking_Click);
             // 
-            // grbSelectValue
-            // 
-            this.grbSelectValue.Controls.Add(this.rbtnFirstToEnd);
-            this.grbSelectValue.Controls.Add(this.rbtnLCV);
-            this.grbSelectValue.Controls.Add(this.rbtnEndToFirst);
-            this.grbSelectValue.Enabled = false;
-            this.grbSelectValue.Location = new System.Drawing.Point(8, 432);
-            this.grbSelectValue.Name = "grbSelectValue";
-            this.grbSelectValue.Size = new System.Drawing.Size(224, 84);
-            this.grbSelectValue.TabIndex = 13;
-            this.grbSelectValue.TabStop = false;
-            this.grbSelectValue.Text = "Select Value";
-            // 
-            // clbValue
-            // 
-            this.clbValue.CheckOnClick = true;
-            this.clbValue.FormattingEnabled = true;
-            this.clbValue.Items.AddRange(new object[] {
-            "End To First",
-            "LCV"});
-            this.clbValue.Location = new System.Drawing.Point(3, 462);
-            this.clbValue.Name = "clbValue";
-            this.clbValue.Size = new System.Drawing.Size(218, 46);
-            this.clbValue.TabIndex = 0;
-            this.clbValue.Visible = false;
-            // 
-            // rbtnEndToFirst
-            // 
-            this.rbtnEndToFirst.AutoSize = true;
-            this.rbtnEndToFirst.Location = new System.Drawing.Point(6, 41);
-            this.rbtnEndToFirst.Name = "rbtnEndToFirst";
-            this.rbtnEndToFirst.Size = new System.Drawing.Size(102, 22);
-            this.rbtnEndToFirst.TabIndex = 1;
-            this.rbtnEndToFirst.TabStop = true;
-            this.rbtnEndToFirst.Text = "End To First";
-            this.rbtnEndToFirst.UseVisualStyleBackColor = true;
-            // 
-            // rbtnLCV
-            // 
-            this.rbtnLCV.AutoSize = true;
-            this.rbtnLCV.Location = new System.Drawing.Point(6, 61);
-            this.rbtnLCV.Name = "rbtnLCV";
-            this.rbtnLCV.Size = new System.Drawing.Size(49, 22);
-            this.rbtnLCV.TabIndex = 2;
-            this.rbtnLCV.TabStop = true;
-            this.rbtnLCV.Text = "LCV";
-            this.rbtnLCV.UseVisualStyleBackColor = true;
-            // 
-            // rbtnFirstToEnd
-            // 
-            this.rbtnFirstToEnd.AutoSize = true;
-            this.rbtnFirstToEnd.Location = new System.Drawing.Point(6, 21);
-            this.rbtnFirstToEnd.Name = "rbtnFirstToEnd";
-            this.rbtnFirstToEnd.Size = new System.Drawing.Size(102, 22);
-            this.rbtnFirstToEnd.TabIndex = 3;
-            this.rbtnFirstToEnd.TabStop = true;
-            this.rbtnFirstToEnd.Text = "First To End";
-            this.rbtnFirstToEnd.UseVisualStyleBackColor = true;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
@@ -414,6 +401,8 @@
             this.tabControl.ResumeLayout(false);
             this.tabProblem.ResumeLayout(false);
             this.pnlProblem.ResumeLayout(false);
+            this.grbSelectValue.ResumeLayout(false);
+            this.grbSelectValue.PerformLayout();
             this.grbEdges.ResumeLayout(false);
             this.grbEdges.PerformLayout();
             this.grbSelectVariable.ResumeLayout(false);
@@ -421,8 +410,6 @@
             this.grbNumOfVertices.PerformLayout();
             this.tabResult.ResumeLayout(false);
             this.tabResult.PerformLayout();
-            this.grbSelectValue.ResumeLayout(false);
-            this.grbSelectValue.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -432,29 +419,28 @@
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabProblem;
         private System.Windows.Forms.TabPage tabResult;
-        private System.Windows.Forms.Button btnDomains;
+        private System.Windows.Forms.GroupBox grbNumOfVertices;
+        private System.Windows.Forms.GroupBox grbEdges;
         private System.Windows.Forms.GroupBox grbSelectVariable;
+        private System.Windows.Forms.GroupBox grbSelectValue;
         private System.Windows.Forms.CheckedListBox clbVariable;
         private System.Windows.Forms.TextBox txtNumOfVertices;
         private System.Windows.Forms.Button btnOk;
-        private System.Windows.Forms.Label lblLog;
-        private System.Windows.Forms.RichTextBox rtbLog;
-        private System.Windows.Forms.Panel pnlResult;
+        private System.Windows.Forms.Button btnDomains;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Button btnBackTracking;
-        private System.Windows.Forms.GroupBox grbEdges;
         private System.Windows.Forms.Button btnOKEdge;
-        private System.Windows.Forms.Label lblTo;
-        private System.Windows.Forms.Label lblFrom;
-        private System.Windows.Forms.ComboBox cmbToVertices;
-        private System.Windows.Forms.ComboBox cmbFromVertices;
-        private System.Windows.Forms.GroupBox grbNumOfVertices;
         private System.Windows.Forms.Button btnArcConsistency;
         private System.Windows.Forms.Button btnForwardChecking;
         private System.Windows.Forms.Button btnRandomGenerateGraph;
+        private System.Windows.Forms.RichTextBox rtbLog;
+        private System.Windows.Forms.Label lblTo;
+        private System.Windows.Forms.Label lblFrom;
+        private System.Windows.Forms.Label lblLog;
+        private System.Windows.Forms.ComboBox cmbToVertices;
+        private System.Windows.Forms.ComboBox cmbFromVertices;
         private System.Windows.Forms.Panel pnlProblem;
-        private System.Windows.Forms.GroupBox grbSelectValue;
-        private System.Windows.Forms.CheckedListBox clbValue;
+        private System.Windows.Forms.Panel pnlResult;
         private System.Windows.Forms.RadioButton rbtnEndToFirst;
         private System.Windows.Forms.RadioButton rbtnLCV;
         private System.Windows.Forms.RadioButton rbtnFirstToEnd;

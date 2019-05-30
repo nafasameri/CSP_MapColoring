@@ -173,14 +173,14 @@ namespace CSP_MapColoring
         {
             clbDomains.Items.Clear();
             clbDomains.Items.AddRange(obj);
-            Graphics g = panel1.CreateGraphics();
-            g.Clear(panel1.BackColor);
-            int t = 0;
-            for (int i = 0; i < obj.Length; i++)
-            {
-                g.FillEllipse(new SolidBrush((Color)obj[i]), 5, (t++ * 20) + 4, 20, 20);
+            //Graphics g = panel1.CreateGraphics();
+            //g.Clear(panel1.BackColor);
+            //int t = 0;
+            //for (int i = 0; i < obj.Length; i++)
+            //{
+                //g.FillEllipse(new SolidBrush((Color)obj[i]), 5, (t++ * 20) + 4, 20, 20);
                 //clbDomains.SetItemCheckState(i, CheckState.Checked);
-            }
+            //}
         }
     }
 }
