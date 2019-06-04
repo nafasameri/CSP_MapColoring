@@ -15,10 +15,8 @@ namespace CSP_MapColoring
         /// <returns>this color can be add to vertex?</returns>
         public bool CanColor(int vertex, Color color)
         {
-            //if (Graph[vertex].color == Color.Empty)
-            //    return false;
             foreach (int adjCountry in Graph[vertex].Neighbors)
-                if (ColoredMap[adjCountry] == color)
+                if (Graph[adjCountry].color == color)
                     return false;
             return true;
         }
@@ -50,7 +48,7 @@ namespace CSP_MapColoring
             {
                 int mrv = _NumberOfColors;
                 foreach (int adj in Graph[node].Neighbors)
-                    if (ColoredMap[adj] != Color.Empty)
+                    if (Graph[adj].color != Color.Empty)
                         mrv--;
                 if (!mrvs.ContainsKey(node))
                     mrvs.Add(node, mrv);
@@ -78,13 +76,13 @@ namespace CSP_MapColoring
                 bool isSafeColor = true;
                 foreach (int node in Graph[vertex].Neighbors)
                 {
-                    if (ColoredMap[node] == color)
+                    if (Graph[node].color == color)
                     {
                         isSafeColor = false;
                         break;
                     }
                     foreach (int adj in Graph[node].Neighbors.Where(a => a != vertex))
-                        if (ColoredMap[adj] == color)
+                        if (Graph[adj].color == color)
                             total++;
                 }
                 if (isSafeColor && !lcvs.ContainsKey(color))
@@ -92,6 +90,23 @@ namespace CSP_MapColoring
             }
 
             return lcvs.OrderByDescending(v => v.Value).Select(k => k.Key).FirstOrDefault();
+        }
+
+
+        public List<Node> MRV()
+        {
+            var min = Graph.Where(v => v.Value.color == Color.Empty).Min(v => v.Value.domain.Count);
+            return Graph.Values.Where(v => v.domain.Count == min && v.color == Color.Empty).ToList();
+            //return Graph.Values.Where(v => v.domain.Count == min && v.color == Color.Empty).OrderBy(k => k.Name).ToList();
+            //return Graph.OrderBy(k => k.Value.domain.Count).Select(n => n.Value.Where(c => c == min)).ToList();
+        }
+
+        public List<Node> Degree()
+        {
+            var max = Graph.Where(v => v.Value.color == Color.Empty).Max(v => v.Value.Neighbors.Count);
+            return Graph.Values.Where(v => v.Neighbors.Count == max).ToList();
+            //return Graph.Values.Where(v => v.Neighbors.Count == max).OrderByDescending(n => n.Name).ToList();
+            //return Graph.OrderByDescending(n => n.Value.Neighbors.Count).Select(v => v.Value).ToList();
         }
     }
 }

@@ -11,13 +11,12 @@ namespace CSP_MapColoring
         public List<int> Neighbors { get; set; }
         public List<Color> domain { get; set; }
 
-        public Node(int Name, Color color, List<Color> domain)
+        public Node(int Name, Color color, List<Color> domain, List<int> Neighbors)
         {
             this.Name = Name;
             this.color = color;
             this.domain = domain;
-            domain = new List<Color>();
-            Neighbors = new List<int>();
+            this.Neighbors = Neighbors;
         }
     }
 }

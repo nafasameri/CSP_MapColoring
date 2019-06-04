@@ -250,6 +250,7 @@ namespace CSP_MapColoring
             this.clbVariable.Name = "clbVariable";
             this.clbVariable.Size = new System.Drawing.Size(218, 46);
             this.clbVariable.TabIndex = 0;
+            this.clbVariable.SelectedIndexChanged += new System.EventHandler(this.clbVariable_SelectedIndexChanged);
             // 
             // grbNumOfVertices
             // 

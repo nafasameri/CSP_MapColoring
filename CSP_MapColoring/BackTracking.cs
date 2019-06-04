@@ -9,7 +9,7 @@ namespace CSP_MapColoring
     class BackTracking : CSP
     {
         public Heuristic heuristic = new Heuristic();
-        private int N = 0;
+        private int N;
         private List<int> OK = new List<int>();
 
         /// <summary>
@@ -22,23 +22,27 @@ namespace CSP_MapColoring
         private void Coloring(int vertex, List<Color> colors, bool EndToFirst, bool LCV, bool MRV, bool FC, ref string log, int index)
         {
             N++;
-            log += " Select " + vertex.ToString() + " " + ColoredMap[vertex].ToString() + "\r\n";
+            log += " Select " + vertex.ToString() + " " + Graph[vertex].color.ToString() + "\r\n";
             
-            if (heuristic.CanColor(vertex, ColoredMap[vertex]))
-                log += " Add " + vertex.ToString() + " " + ColoredMap[vertex].ToString() + "\r\n";
+            if (heuristic.CanColor(vertex, Graph[vertex].color))
+                log += " Add " + vertex.ToString() + " " + Graph[vertex].color.ToString() + "\r\n";
             else
             {
-                log += " Delete " + vertex.ToString() + " " + ColoredMap[vertex].ToString() + "\r\n";
-                try { ColoredMap[vertex] = Graph[vertex].domain[index]; } catch { }
+                log += " Delete " + vertex.ToString() + " " + Graph[vertex].color.ToString() + "\r\n";
+                try { Graph[vertex].color = Graph[vertex].domain[index]; } catch { }
                 if (EndToFirst && index >= 0)
                     Coloring(vertex, colors, EndToFirst, LCV, MRV, FC, ref log, --index);
                 else if (!EndToFirst && index < Graph[vertex].domain.Count)
                     Coloring(vertex, colors, EndToFirst, LCV, MRV, FC, ref log, ++index);
                 else
                 {
-                    ColoredMap[vertex] = Color.Empty;
-                    Graph[_Visited[_Visited.Count - 1]].domain.Remove(ColoredMap[_Visited[_Visited.Count - 1]]);
-                    DFS(_Visited[_Visited.Count - 1], colors, EndToFirst, LCV, MRV, FC, ref log);
+                    Graph[vertex].color = Color.Empty;
+                    try
+                    {
+                        Graph[_Visited[_Visited.Count - 2]].domain.Remove(Graph[_Visited[_Visited.Count - 2]].color);
+                        DFS(_Visited[_Visited.Count - 2], colors, EndToFirst, LCV, MRV, FC, ref log);
+                    }
+                    catch { }
                     return;
                 }
             }
@@ -60,46 +64,41 @@ namespace CSP_MapColoring
         private void DFS(int vertex, List<Color> colors, bool EndToFirst, bool LCV, bool MRV, bool FC, ref string log)
         {
             _Visited.Add(vertex);
-            if (LCV) ColoredMap[vertex] = heuristic.GetLCV(vertex, colors);
-            else if (EndToFirst) try { ColoredMap[vertex] = Graph[vertex].domain[Graph[vertex].domain.Count - 1]; } catch { }
-            else try { ColoredMap[vertex] = Graph[vertex].domain[0]; } catch { }
+            if (LCV) Graph[vertex].color = heuristic.GetLCV(vertex, colors);
+            else if (EndToFirst) try { Graph[vertex].color = Graph[vertex].domain[Graph[vertex].domain.Count - 1]; } catch { }
+            else try { Graph[vertex].color = Graph[vertex].domain[0]; } catch { }
 
-            if (ColoredMap[vertex] != Color.Empty)
+            if (Graph[vertex].color != Color.Empty)
                 if (EndToFirst)
                     Coloring(vertex, colors, EndToFirst, LCV, MRV, FC, ref log, Graph[vertex].domain.Count - 2);
                 else
                     Coloring(vertex, colors, EndToFirst, LCV, MRV, FC, ref log, 1);
             else
-            {
-                log += " Select " + vertex.ToString() + " " + ColoredMap[vertex].ToString() + "\r\n";
-                //Graph[parent].domain.Remove(ColoredMap[parent]);
-                //DFS(vertex, parent, colors, heuristicLCV, heuristicMRV, FC, ref log);
-                //return;
-            }
+                log += " Select " + vertex.ToString() + " " + Graph[vertex].color.ToString() + "\r\n";
 
             if (FC)
-                if (!ForwardChecking(Graph[vertex], ColoredMap[vertex], ref log))
+                if (!ForwardChecking(Graph[vertex], Graph[vertex].color, ref log))
                     if (!OK.Contains(vertex))
                     {
-                        DisFC(Graph[vertex], ColoredMap[vertex], ref log);
-                        //Graph[vertex].domain.Remove(ColoredMap[vertex]);
-                       // DFS(parent, colors, EndToFirst, heuristicLCV, heuristicMRV, FC, ref log);
+                        DisFC(Graph[vertex], Graph[vertex].color, ref log);
+                        Graph[vertex].color = Color.Empty;
+                        try
+                        {
+                            Graph[_Visited[_Visited.Count - 2]].domain.Remove(Graph[_Visited[_Visited.Count - 2]].color);
+                            DFS(_Visited[_Visited.Count - 2], colors, EndToFirst, LCV, MRV, FC, ref log);
+                        }
+                        catch { }
                     }
 
-            object adjList;
             if (MRV)
             {
-                adjList = heuristic.GetMRV(vertex).OrderByDescending(v => heuristic.GetDegree(v));
+                object adjList = heuristic.GetMRV(vertex).OrderByDescending(v => heuristic.GetDegree(v));
                 foreach (int next in (IOrderedEnumerable<int>)adjList)
                     if (!_Visited.Contains(next))
                         DFS(next, colors, EndToFirst, LCV, MRV, FC, ref log);
             }
             else
             {
-                //adjList = Graph.Keys;
-                //ArrayList list = new ArrayList();
-                //for (int i = 0; i < Graph.Count; i++)
-                //    list.Add(i);
                 foreach (int next in Graph.Keys)
                     if (!_Visited.Contains(next))
                         DFS(next, colors, EndToFirst, LCV, MRV, FC, ref log);
@@ -120,11 +119,8 @@ namespace CSP_MapColoring
         public int BT(List<Color> colors, bool EndToFirst, bool LCV, bool MRV, bool FC, ref string log)
         {
             N = 0;
-            if (ColoredMap != null) ColoredMap.Clear();
-            ColoredMap = new List<Color>(Graph.Count + 1);
-            for (int i = 0; i <= Graph.Count; i++)
-                ColoredMap.Add(Color.Empty);
-            heuristic.ColoredMap = ColoredMap;
+            for (int i = 0; i < Graph.Count; i++)
+                Graph[i].color = Color.Empty;
             _NumberOfColors = colors.Count;
 
             NodeDegrees = Graph.OrderBy(k => k.Key).Select(s => s.Value.Neighbors.Count).ToArray();
@@ -134,7 +130,6 @@ namespace CSP_MapColoring
                 if (!_Visited.Contains(key))
                     DFS(key, colors, EndToFirst, LCV, MRV, FC, ref log);
 
-            log += " N = " + N.ToString() + "\r\n";
             _Visited.Clear();
             OK.Clear();
             return N;

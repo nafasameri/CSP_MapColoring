@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace CSP_MapColoring
 {
@@ -9,7 +8,6 @@ namespace CSP_MapColoring
         protected List<int> _Visited = new List<int>();
 
         public Dictionary<int, Node> Graph { get; set; }
-        public List<Color> ColoredMap { get; set; }
         public int[] NodeDegrees { get; set; }
     }
 }
