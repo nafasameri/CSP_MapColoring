@@ -28,9 +28,11 @@ namespace CSP_MapColoring
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabProblem = new System.Windows.Forms.TabPage();
             this.pnlProblem = new System.Windows.Forms.Panel();
+            this.lblNumOfEdge = new System.Windows.Forms.Label();
             this.btnRandomGenerateGraph = new System.Windows.Forms.Button();
             this.grbSelectValue = new System.Windows.Forms.GroupBox();
             this.rbtnFirstToEnd = new System.Windows.Forms.RadioButton();
@@ -97,6 +99,7 @@ namespace CSP_MapColoring
             // pnlProblem
             // 
             this.pnlProblem.BackColor = System.Drawing.SystemColors.Control;
+            this.pnlProblem.Controls.Add(this.lblNumOfEdge);
             this.pnlProblem.Controls.Add(this.btnRandomGenerateGraph);
             this.pnlProblem.Location = new System.Drawing.Point(238, 8);
             this.pnlProblem.Name = "pnlProblem";
@@ -105,6 +108,15 @@ namespace CSP_MapColoring
             this.pnlProblem.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mouseDown);
             this.pnlProblem.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mouseMove);
             this.pnlProblem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mouseUp);
+            // 
+            // lblNumOfEdge
+            // 
+            this.lblNumOfEdge.AutoSize = true;
+            this.lblNumOfEdge.Location = new System.Drawing.Point(601, 444);
+            this.lblNumOfEdge.Name = "lblNumOfEdge";
+            this.lblNumOfEdge.Size = new System.Drawing.Size(67, 18);
+            this.lblNumOfEdge.TabIndex = 12;
+            this.lblNumOfEdge.Text = "Edges = 0";
             // 
             // btnRandomGenerateGraph
             // 
@@ -123,9 +135,9 @@ namespace CSP_MapColoring
             this.grbSelectValue.Controls.Add(this.rbtnLCV);
             this.grbSelectValue.Controls.Add(this.rbtnEndToFirst);
             this.grbSelectValue.Enabled = false;
-            this.grbSelectValue.Location = new System.Drawing.Point(8, 429);
+            this.grbSelectValue.Location = new System.Drawing.Point(8, 410);
             this.grbSelectValue.Name = "grbSelectValue";
-            this.grbSelectValue.Size = new System.Drawing.Size(224, 90);
+            this.grbSelectValue.Size = new System.Drawing.Size(224, 109);
             this.grbSelectValue.TabIndex = 13;
             this.grbSelectValue.TabStop = false;
             this.grbSelectValue.Text = "Select Value";
@@ -133,7 +145,8 @@ namespace CSP_MapColoring
             // rbtnFirstToEnd
             // 
             this.rbtnFirstToEnd.AutoSize = true;
-            this.rbtnFirstToEnd.Location = new System.Drawing.Point(12, 23);
+            this.rbtnFirstToEnd.Checked = true;
+            this.rbtnFirstToEnd.Location = new System.Drawing.Point(12, 25);
             this.rbtnFirstToEnd.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
             this.rbtnFirstToEnd.Name = "rbtnFirstToEnd";
             this.rbtnFirstToEnd.Size = new System.Drawing.Size(102, 22);
@@ -145,24 +158,22 @@ namespace CSP_MapColoring
             // rbtnLCV
             // 
             this.rbtnLCV.AutoSize = true;
-            this.rbtnLCV.Location = new System.Drawing.Point(12, 63);
+            this.rbtnLCV.Location = new System.Drawing.Point(12, 77);
             this.rbtnLCV.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
             this.rbtnLCV.Name = "rbtnLCV";
             this.rbtnLCV.Size = new System.Drawing.Size(49, 22);
             this.rbtnLCV.TabIndex = 2;
-            this.rbtnLCV.TabStop = true;
             this.rbtnLCV.Text = "LCV";
             this.rbtnLCV.UseVisualStyleBackColor = true;
             // 
             // rbtnEndToFirst
             // 
             this.rbtnEndToFirst.AutoSize = true;
-            this.rbtnEndToFirst.Location = new System.Drawing.Point(12, 43);
+            this.rbtnEndToFirst.Location = new System.Drawing.Point(12, 51);
             this.rbtnEndToFirst.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
             this.rbtnEndToFirst.Name = "rbtnEndToFirst";
             this.rbtnEndToFirst.Size = new System.Drawing.Size(102, 22);
             this.rbtnEndToFirst.TabIndex = 1;
-            this.rbtnEndToFirst.TabStop = true;
             this.rbtnEndToFirst.Text = "End To First";
             this.rbtnEndToFirst.UseVisualStyleBackColor = true;
             // 
@@ -174,7 +185,7 @@ namespace CSP_MapColoring
             this.grbEdges.Controls.Add(this.cmbToVertices);
             this.grbEdges.Controls.Add(this.cmbFromVertices);
             this.grbEdges.Enabled = false;
-            this.grbEdges.Location = new System.Drawing.Point(8, 161);
+            this.grbEdges.Location = new System.Drawing.Point(8, 146);
             this.grbEdges.Name = "grbEdges";
             this.grbEdges.Size = new System.Drawing.Size(224, 174);
             this.grbEdges.TabIndex = 2;
@@ -232,9 +243,9 @@ namespace CSP_MapColoring
             // 
             this.grbSelectVariable.Controls.Add(this.clbVariable);
             this.grbSelectVariable.Enabled = false;
-            this.grbSelectVariable.Location = new System.Drawing.Point(8, 342);
+            this.grbSelectVariable.Location = new System.Drawing.Point(8, 326);
             this.grbSelectVariable.Name = "grbSelectVariable";
-            this.grbSelectVariable.Size = new System.Drawing.Size(224, 81);
+            this.grbSelectVariable.Size = new System.Drawing.Size(224, 78);
             this.grbSelectVariable.TabIndex = 3;
             this.grbSelectVariable.TabStop = false;
             this.grbSelectVariable.Text = "Select Variable";
@@ -258,7 +269,7 @@ namespace CSP_MapColoring
             this.grbNumOfVertices.Controls.Add(this.txtNumOfVertices);
             this.grbNumOfVertices.Location = new System.Drawing.Point(8, 7);
             this.grbNumOfVertices.Name = "grbNumOfVertices";
-            this.grbNumOfVertices.Size = new System.Drawing.Size(224, 149);
+            this.grbNumOfVertices.Size = new System.Drawing.Size(224, 133);
             this.grbNumOfVertices.TabIndex = 6;
             this.grbNumOfVertices.TabStop = false;
             this.grbNumOfVertices.Text = "Vertices";
@@ -266,7 +277,7 @@ namespace CSP_MapColoring
             // btnOk
             // 
             this.btnOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnOk.Location = new System.Drawing.Point(104, 88);
+            this.btnOk.Location = new System.Drawing.Point(104, 78);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(92, 37);
             this.btnOk.TabIndex = 1;
@@ -276,7 +287,7 @@ namespace CSP_MapColoring
             // 
             // txtNumOfVertices
             // 
-            this.txtNumOfVertices.Location = new System.Drawing.Point(26, 45);
+            this.txtNumOfVertices.Location = new System.Drawing.Point(26, 35);
             this.txtNumOfVertices.Name = "txtNumOfVertices";
             this.txtNumOfVertices.Size = new System.Drawing.Size(170, 26);
             this.txtNumOfVertices.TabIndex = 0;
@@ -317,11 +328,15 @@ namespace CSP_MapColoring
             // 
             // rtbLog
             // 
+            this.rtbLog.EnableAutoDragDrop = true;
+            this.rtbLog.ImeMode = System.Windows.Forms.ImeMode.On;
             this.rtbLog.Location = new System.Drawing.Point(629, 25);
             this.rtbLog.Name = "rtbLog";
+            this.rtbLog.ReadOnly = true;
             this.rtbLog.Size = new System.Drawing.Size(334, 494);
             this.rtbLog.TabIndex = 0;
             this.rtbLog.Text = "";
+            this.rtbLog.WordWrap = false;
             // 
             // btnDomains
             // 
@@ -395,6 +410,7 @@ namespace CSP_MapColoring
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Comic Sans MS", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.Name = "MainForm";
@@ -402,6 +418,7 @@ namespace CSP_MapColoring
             this.tabControl.ResumeLayout(false);
             this.tabProblem.ResumeLayout(false);
             this.pnlProblem.ResumeLayout(false);
+            this.pnlProblem.PerformLayout();
             this.grbSelectValue.ResumeLayout(false);
             this.grbSelectValue.PerformLayout();
             this.grbEdges.ResumeLayout(false);
@@ -445,6 +462,6 @@ namespace CSP_MapColoring
         private System.Windows.Forms.RadioButton rbtnEndToFirst;
         private System.Windows.Forms.RadioButton rbtnLCV;
         private System.Windows.Forms.RadioButton rbtnFirstToEnd;
+        private System.Windows.Forms.Label lblNumOfEdge;
     }
 }
-

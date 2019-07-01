@@ -171,8 +171,8 @@ namespace CSP_MapColoring
 
         private void Domains_Load(object sender, EventArgs e)
         {
-            clbDomains.Items.Clear();
-            clbDomains.Items.AddRange(obj);
+            //clbDomains.Items.Clear();
+            //clbDomains.Items.AddRange(obj);
             //Graphics g = panel1.CreateGraphics();
             //g.Clear(panel1.BackColor);
             //int t = 0;

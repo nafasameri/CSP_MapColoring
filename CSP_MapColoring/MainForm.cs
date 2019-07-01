@@ -35,8 +35,10 @@ namespace CSP_MapColoring
 
         private void Neighbor()
         {
+            Neighbors.Clear();
             for (int i = 0; i < NumOfVertices; i++)
             {
+                Graph[i].Neighbors.Clear();
                 List<int> temp = new List<int>();
                 for (int j = 0; j < NumOfVertices; j++)
                     if (State[i, j])
@@ -51,7 +53,8 @@ namespace CSP_MapColoring
             rtbLog.Text = "Begin Of Solving CSP.\r\n";
             for (int i = 0; i < NumOfVertices; i++)
                 State[i, i] = false;
-            if (Neighbors.Count == 0) Neighbor();
+            //if (Neighbors.Count == 0) 
+            Neighbor();
             for (int i = 0; i < NumOfVertices; i++)
                 Graph[i].Neighbors = Neighbors[i];
             BT.Graph = heuristic.Graph = Graph;
@@ -72,6 +75,18 @@ namespace CSP_MapColoring
             else rtbLog.Text += "CSP not be Solved.\r\n";
             rtbLog.Text += "N = " + N.ToString() + "\r\n";
             rtbLog.Text += (finish - start).ToString();
+            rtbLog.Focus();
+            rtbLog.SelectionStart = rtbLog.Text.Length;
+        }
+
+        private int CountEdge()
+        {
+            int count = 0;
+            for (int i = 0; i < NumOfVertices; i++)
+                for (int j = 0; j < NumOfVertices; j++)
+                    if (State[i, j])
+                        count++;
+            return count / 2;
         }
 
         private void Analysis()
@@ -113,7 +128,7 @@ namespace CSP_MapColoring
             };
             #endregion
 
-            DateTime time = DateTime.Now;
+            DateTime time1 = DateTime.Now;
             for (int i = 1; i <= len; i++)
             {
                 graph.Add(i - 1, new Node(i - 1, Color.Empty, colors, new List<int>()));
@@ -127,7 +142,7 @@ namespace CSP_MapColoring
                     {
                         row = random.Next(0, i);
                         col = random.Next(0, i);
-                    } while (State[row, col]);
+                    } while (State[row, col] && row != col);
                     State[row, col] = State[col, row] = true;
 
                     Neighbors.Clear();
@@ -137,19 +152,23 @@ namespace CSP_MapColoring
                         for (int l = 0; l < graph.Count; l++)
                             if (State[k, l] && k != l)
                                 temp.Add(l);
-                        Neighbors.Add(k, temp);
-                        graph[k].Neighbors = Neighbors[k];
+                        //Neighbors.Add(k, temp);
+                        graph[k].Neighbors.Clear();
+                        graph[k].Neighbors.AddRange(temp);// = Neighbors[k];
                     }
 
-                    backTracking.Graph = _heuristic.Graph = graph;
-                    backTracking.heuristic = _heuristic;
+                    BT.Graph = _heuristic.Graph = graph;
+                    BT.heuristic = _heuristic;
 
                     colors.Clear();
-                    for (int c = 0; c < i; c++)
-                        colors.Add((Color)obj[c]);
+                    colors.Add(Color.MidnightBlue);
+                    colors.Add(Color.IndianRed);
+                    colors.Add(Color.Bisque);
+                    //for (int c = 0; c < i; c++)
+                    //colors.Add((Color)obj[c]);
 
                     start = DateTime.Now;
-                    Ns[i - 1, j] = backTracking.BT(colors, false, false, false, false, ref log);
+                    Ns[i - 1, j] = BT.BT(colors, false, false, false, true, false, ref log);
                     finish = DateTime.Now;
                     dateTimes[i - 1, j] = (finish - start);
                 }
@@ -158,8 +177,8 @@ namespace CSP_MapColoring
 
             #region write the file
             /// times
-            string pathtext = @"E:\AI\Analysis\time.txt";
-            File.WriteAllText(pathtext, (time2 - time).ToString() + "\r\n\t\t");
+            string pathtext = @"E:\AI\time.txt";
+            File.AppendAllText(pathtext, (time2 - time1).ToString() + "\r\n\t\t");
             for (int i = 0; i < len; i++)
                 File.AppendAllText(pathtext, i.ToString() + "\t\t\t");
             for (int j = 0; j < (len * (len - 1)) / 2; j++)
@@ -171,9 +190,9 @@ namespace CSP_MapColoring
                     else
                         File.AppendAllText(pathtext, "\t\t00:00:00");
             }
-            
+
             /// N
-            string pathN = @"E:\AI\Analysis\N.txt";
+            string pathN = @"E:\AI\Analysis10\BT N.txt";
             File.WriteAllText(pathN, "");
             for (int j = 0; j < (len * (len - 1)) / 2; j++)
             {
@@ -271,7 +290,7 @@ namespace CSP_MapColoring
         {
             g = elm.CreateGraphics();
             g.Clear(elm.BackColor);
-
+            
             /// set weight edge in desgin
             for (int i = 0; i < NumOfVertices; i++)
                 for (int j = 0; j < NumOfVertices; j++)
@@ -280,15 +299,9 @@ namespace CSP_MapColoring
             /// draw nodes and indexs
             foreach (var item in Graph)
             {
-                g.FillEllipse(new SolidBrush(item.Value.color), item.Value.point.X - 10, item.Value.point.Y - 10, 20, 20);
+                g.FillEllipse(new SolidBrush(item.Value.color), item.Value.point.X - 10, item.Value.point.Y - 10, 23, 23);
                 g.DrawString(item.Key.ToString(), this.Font, new SolidBrush(Color.Black), new Point(item.Value.point.X - 10, item.Value.point.Y - 10));
             }
-        }
-
-        private void Draw_(Color color, Node Vertice)
-        {
-            g.FillEllipse(new SolidBrush(color), Vertice.point.X - 10, Vertice.point.Y - 10, 20, 20);
-            g.DrawString(Vertice.Name.ToString(), new Font(FontFamily.GenericSansSerif, 12), new SolidBrush(Color.DarkViolet), new Point(Vertice.point.X - 10, Vertice.point.Y - 10));
         }
         #endregion
 
@@ -313,6 +326,9 @@ namespace CSP_MapColoring
 
         private void btnOk_Click(object sender, EventArgs e)
         {
+            Graph.Clear();
+            //BT.Graph.Clear();
+            //heuristic.Graph.Clear();
             int.TryParse(txtNumOfVertices.Text, out NumOfVertices);
             Point[] points = SetLocationVertices();
             State = new bool[NumOfVertices, NumOfVertices];
@@ -325,13 +341,33 @@ namespace CSP_MapColoring
                 cmbToVertices.Items.AddRange(new object[] { i });
                 Graph.Add(i, new Node(i, Color.Empty, new List<Color>(), new List<int>()));
                 if (i < points.Length) Graph[i].point = points[i];
-                else if (i < 41) Graph[i].point = new Point(i, (i - points.Length) * 20);
-                else if (i < 71) Graph[i].point = new Point(i + 20, (i - 40) * 20);
-                else if (i < 97) Graph[i].point = new Point(i + 20, (i - 70) * 20);
-                else Graph[i].point = new Point(50 + i, 50 + i);
+                else if (i < 41) Graph[i].point = new Point(i + 5, (i - 15) * 20);
+                else if (i < 66) Graph[i].point = new Point(i + 10, (i - 40) * 20);
+                else if (i < 91) Graph[i].point = new Point(i + 10, (i - 65) * 20);
+                else if (i < 116) Graph[i].point = new Point(i + 10, (i - 90) * 20);
+                else if (i < 141) Graph[i].point = new Point(i + 10, (i - 115) * 20);
+                else if (i < 166) Graph[i].point = new Point(i + 10, (i - 140) * 20);
+                else if (i < 191) Graph[i].point = new Point(i + 10, (i - 165) * 20);
+                else if (i < 216) Graph[i].point = new Point(i + 10, (i - 190) * 20);
+                else if (i < 241) Graph[i].point = new Point(i + 10, (i - 215) * 20);
+                else if (i < 266) Graph[i].point = new Point(i + 10, (i - 240) * 20);
+                else if (i < 291) Graph[i].point = new Point(i + 10, (i - 265) * 20);
+                else if (i < 316) Graph[i].point = new Point(i + 10, (i - 290) * 20);
+                else if (i < 341) Graph[i].point = new Point(i + 10, (i - 315) * 20);
+                else if (i < 366) Graph[i].point = new Point(i + 10, (i - 340) * 20);
+                else if (i < 391) Graph[i].point = new Point(i + 10, (i - 365) * 20);
+                else if (i < 416) Graph[i].point = new Point(i + 10, (i - 390) * 20);
+                else if (i < 441) Graph[i].point = new Point(i + 10, (i - 415) * 20);
+                else if (i < 466) Graph[i].point = new Point(i + 10, (i - 440) * 20);
+                else if (i < 491) Graph[i].point = new Point(i + 10, (i - 465) * 20);
+                else if (i < 516) Graph[i].point = new Point(i + 10, (i - 490) * 20);
+                else if (i < 705) Graph[i].point = new Point(i + 10, (i - 500));
+                else Graph[i].point = new Point(i - 200, (i - 690));
             }
-            grbNumOfVertices.Enabled = false;
+            //grbNumOfVertices.Enabled = false;
             grbEdges.Enabled = grbSelectVariable.Enabled = grbSelectValue.Enabled = true;
+            Draw(pnlProblem);
+            lblNumOfEdge.Text = "Edges = " + CountEdge().ToString();
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -353,20 +389,29 @@ namespace CSP_MapColoring
             catch { }
             grbNumOfVertices.Enabled = false;
             Draw(pnlProblem);
+            lblNumOfEdge.Text = "Edges = "+CountEdge().ToString();
         }
-        
+
         private void btnForwardChecking_Click(object sender, EventArgs e)
         {
-            Begin();
-            N = BT.BT(colors, rbtnEndToFirst.Checked, rbtnLCV.Checked, clbVariable.GetItemChecked(1), true, ref log);
-            End();
+            try
+            {
+                Begin();
+                N = BT.BT(colors, rbtnEndToFirst.Checked, rbtnLCV.Checked, clbVariable.GetItemChecked(0), clbVariable.GetItemChecked(1), true, ref log);
+                End();
+            }
+            catch { MessageBox.Show("Stack overflow", "Stack overflow...", MessageBoxButtons.OK,MessageBoxIcon.Error); }
         }
 
         private void btnBackTracking_Click(object sender, EventArgs e)
         {
-            Begin();
-            N = BT.BT(colors, rbtnEndToFirst.Checked, rbtnLCV.Checked, clbVariable.GetItemChecked(1), false, ref log);
-            End();
+            try
+            {
+                Begin();
+                N = BT.BT(colors, rbtnEndToFirst.Checked, rbtnLCV.Checked, clbVariable.GetItemChecked(0), clbVariable.GetItemChecked(1), false, ref log);
+                End();
+            }
+            catch { MessageBox.Show("Stack overflow", "Stack overflow...", MessageBoxButtons.OK,MessageBoxIcon.Error); }
         }
 
         private void btnRandomGenerateGraph_Click(object sender, EventArgs e)
@@ -378,20 +423,21 @@ namespace CSP_MapColoring
                 State[row, col] = State[col, row] = true;
             }
             Draw(pnlProblem);
+            lblNumOfEdge.Text = "Edges = "+CountEdge().ToString();
         }
 
         private void clbVariable_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (clbVariable.GetItemCheckState(0) == CheckState.Checked || clbVariable.GetItemCheckState(1) == CheckState.Checked)
-            {
-                clbVariable.SetItemCheckState(1, CheckState.Checked);
-                clbVariable.SetItemCheckState(0, CheckState.Checked);
-            }
-            if (clbVariable.GetItemCheckState(0) == CheckState.Unchecked || clbVariable.GetItemCheckState(1) == CheckState.Unchecked)
-            {
-                clbVariable.SetItemCheckState(1, CheckState.Unchecked);
-                clbVariable.SetItemCheckState(0, CheckState.Unchecked);
-            }
+            //if (clbVariable.GetItemCheckState(0) == CheckState.Checked || clbVariable.GetItemCheckState(1) == CheckState.Checked)
+            //{
+            //    clbVariable.SetItemCheckState(1, CheckState.Checked);
+            //    clbVariable.SetItemCheckState(0, CheckState.Checked);
+            //}
+            //if (clbVariable.GetItemCheckState(0) == CheckState.Unchecked || clbVariable.GetItemCheckState(1) == CheckState.Unchecked)
+            //{
+            //    clbVariable.SetItemCheckState(1, CheckState.Unchecked);
+            //    clbVariable.SetItemCheckState(0, CheckState.Unchecked);
+            //}
         }
         #endregion
     }

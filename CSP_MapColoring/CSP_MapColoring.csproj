@@ -47,7 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BackTracking.cs" />
-    <Compile Include="CSP.cs" />
     <Compile Include="DomainsForm.cs">
       <SubType>Form</SubType>
     </Compile>
