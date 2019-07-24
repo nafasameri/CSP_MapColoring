@@ -105,6 +105,7 @@ namespace CSP_MapColoring
             this.pnlProblem.Name = "pnlProblem";
             this.pnlProblem.Size = new System.Drawing.Size(732, 511);
             this.pnlProblem.TabIndex = 12;
+            this.pnlProblem.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseClick);
             this.pnlProblem.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mouseDown);
             this.pnlProblem.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mouseMove);
             this.pnlProblem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mouseUp);
@@ -112,7 +113,7 @@ namespace CSP_MapColoring
             // lblNumOfEdge
             // 
             this.lblNumOfEdge.AutoSize = true;
-            this.lblNumOfEdge.Location = new System.Drawing.Point(601, 444);
+            this.lblNumOfEdge.Location = new System.Drawing.Point(597, 444);
             this.lblNumOfEdge.Name = "lblNumOfEdge";
             this.lblNumOfEdge.Size = new System.Drawing.Size(67, 18);
             this.lblNumOfEdge.TabIndex = 12;
@@ -313,6 +314,7 @@ namespace CSP_MapColoring
             this.pnlResult.Name = "pnlResult";
             this.pnlResult.Size = new System.Drawing.Size(615, 511);
             this.pnlResult.TabIndex = 2;
+            this.pnlResult.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseClick);
             this.pnlResult.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mouseDown);
             this.pnlResult.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mouseMove);
             this.pnlResult.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mouseUp);

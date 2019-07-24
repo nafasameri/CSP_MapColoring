@@ -11,7 +11,7 @@ namespace CSP_MapColoring
     public partial class MainForm : Form
     {
         private int NumOfVertices;
-        private int N;
+        private int N, to = -1, from = -1;
         private string log;
         private bool[,] State;
         Graphics g;
@@ -21,10 +21,8 @@ namespace CSP_MapColoring
         Dictionary<int, Node> Graph = new Dictionary<int, Node>();
         Dictionary<int, List<int>> Neighbors = new Dictionary<int, List<int>>();
         List<Color> colors = new List<Color>();
-        BackTracking BT = new BackTracking();
-        Heuristic heuristic = new Heuristic();
         Random random = new Random();
-        
+
 
         #region Method's
         public MainForm()
@@ -53,12 +51,9 @@ namespace CSP_MapColoring
             rtbLog.Text = "Begin Of Solving CSP.\r\n";
             for (int i = 0; i < NumOfVertices; i++)
                 State[i, i] = false;
-            //if (Neighbors.Count == 0) 
             Neighbor();
             for (int i = 0; i < NumOfVertices; i++)
                 Graph[i].Neighbors = Neighbors[i];
-            BT.Graph = heuristic.Graph = Graph;
-            BT.heuristic = heuristic;
             start = DateTime.Now;
         }
 
@@ -83,10 +78,10 @@ namespace CSP_MapColoring
         {
             int count = 0;
             for (int i = 0; i < NumOfVertices; i++)
-                for (int j = 0; j < NumOfVertices; j++)
+                for (int j = 0; j < i; j++)
                     if (State[i, j])
                         count++;
-            return count / 2;
+            return count;
         }
 
         private void Analysis()
@@ -157,9 +152,6 @@ namespace CSP_MapColoring
                         graph[k].Neighbors.AddRange(temp);// = Neighbors[k];
                     }
 
-                    BT.Graph = _heuristic.Graph = graph;
-                    BT.heuristic = _heuristic;
-
                     colors.Clear();
                     colors.Add(Color.MidnightBlue);
                     colors.Add(Color.IndianRed);
@@ -168,7 +160,7 @@ namespace CSP_MapColoring
                     //colors.Add((Color)obj[c]);
 
                     start = DateTime.Now;
-                    Ns[i - 1, j] = BT.BT(colors, false, false, false, true, false, ref log);
+                    Ns[i - 1, j] = BackTracking.BT(graph, colors, false, false, false, true, false, ref log);
                     finish = DateTime.Now;
                     dateTimes[i - 1, j] = (finish - start);
                 }
@@ -290,7 +282,7 @@ namespace CSP_MapColoring
         {
             g = elm.CreateGraphics();
             g.Clear(elm.BackColor);
-            
+
             /// set weight edge in desgin
             for (int i = 0; i < NumOfVertices; i++)
                 for (int j = 0; j < NumOfVertices; j++)
@@ -327,8 +319,6 @@ namespace CSP_MapColoring
         private void btnOk_Click(object sender, EventArgs e)
         {
             Graph.Clear();
-            //BT.Graph.Clear();
-            //heuristic.Graph.Clear();
             int.TryParse(txtNumOfVertices.Text, out NumOfVertices);
             Point[] points = SetLocationVertices();
             State = new bool[NumOfVertices, NumOfVertices];
@@ -364,7 +354,6 @@ namespace CSP_MapColoring
                 else if (i < 705) Graph[i].point = new Point(i + 10, (i - 500));
                 else Graph[i].point = new Point(i - 200, (i - 690));
             }
-            //grbNumOfVertices.Enabled = false;
             grbEdges.Enabled = grbSelectVariable.Enabled = grbSelectValue.Enabled = true;
             Draw(pnlProblem);
             lblNumOfEdge.Text = "Edges = " + CountEdge().ToString();
@@ -387,31 +376,25 @@ namespace CSP_MapColoring
                     State[cmbFromVertices.SelectedIndex, cmbToVertices.SelectedIndex] = State[cmbToVertices.SelectedIndex, cmbFromVertices.SelectedIndex] = true;
             }
             catch { }
-            grbNumOfVertices.Enabled = false;
+            //grbNumOfVertices.Enabled = false;
             Draw(pnlProblem);
-            lblNumOfEdge.Text = "Edges = "+CountEdge().ToString();
+            lblNumOfEdge.Text = "Edges = " + CountEdge().ToString();
         }
 
         private void btnForwardChecking_Click(object sender, EventArgs e)
         {
-            try
-            {
-                Begin();
-                N = BT.BT(colors, rbtnEndToFirst.Checked, rbtnLCV.Checked, clbVariable.GetItemChecked(0), clbVariable.GetItemChecked(1), true, ref log);
-                End();
-            }
-            catch { MessageBox.Show("Stack overflow", "Stack overflow...", MessageBoxButtons.OK,MessageBoxIcon.Error); }
+            Begin();
+            try { N = BackTracking.BT(Graph, colors, rbtnEndToFirst.Checked, rbtnLCV.Checked, clbVariable.GetItemChecked(0), clbVariable.GetItemChecked(1), true, ref log); }
+            catch { MessageBox.Show("There are limits to RAM!", "Stack overflow...", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            End();
         }
 
         private void btnBackTracking_Click(object sender, EventArgs e)
         {
-            try
-            {
-                Begin();
-                N = BT.BT(colors, rbtnEndToFirst.Checked, rbtnLCV.Checked, clbVariable.GetItemChecked(0), clbVariable.GetItemChecked(1), false, ref log);
-                End();
-            }
-            catch { MessageBox.Show("Stack overflow", "Stack overflow...", MessageBoxButtons.OK,MessageBoxIcon.Error); }
+            Begin();
+            try { N = BackTracking.BT(Graph, colors, rbtnEndToFirst.Checked, rbtnLCV.Checked, clbVariable.GetItemChecked(0), clbVariable.GetItemChecked(1), false, ref log); }
+            catch { MessageBox.Show("There are limits to RAM!", "Stack overflow...", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            End();
         }
 
         private void btnRandomGenerateGraph_Click(object sender, EventArgs e)
@@ -423,7 +406,7 @@ namespace CSP_MapColoring
                 State[row, col] = State[col, row] = true;
             }
             Draw(pnlProblem);
-            lblNumOfEdge.Text = "Edges = "+CountEdge().ToString();
+            lblNumOfEdge.Text = "Edges = " + CountEdge().ToString();
         }
 
         private void clbVariable_SelectedIndexChanged(object sender, EventArgs e)
@@ -438,6 +421,36 @@ namespace CSP_MapColoring
             //    clbVariable.SetItemCheckState(1, CheckState.Unchecked);
             //    clbVariable.SetItemCheckState(0, CheckState.Unchecked);
             //}
+        }
+
+        private void mouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (to == -1)
+                {
+                    foreach (var p in Graph)
+                        if (p.Value.point.X + 10 >= e.X && p.Value.point.X - 10 <= e.X)
+                            if (p.Value.point.Y + 10 >= e.Y && p.Value.point.Y - 10 <= e.Y)
+                                to = p.Value.Name;
+                }
+                else if (from == -1)
+                    foreach (var p in Graph)
+                        if (p.Value.point.X + 10 >= e.X && p.Value.point.X - 10 <= e.X)
+                            if (p.Value.point.Y + 10 >= e.Y && p.Value.point.Y - 10 <= e.Y)
+                                from = p.Value.Name;
+                if (to != -1 && from != -1)
+                {
+                    if (!State[to, from])
+                        State[to, from] = State[from, to] = true;
+                    else
+                        State[to, from] = State[from, to] = false;
+                    to = from = -1;
+                }
+                Draw(pnlProblem);
+                Draw(pnlResult);
+                lblNumOfEdge.Text = "Edges = " + CountEdge().ToString();
+            }
         }
         #endregion
     }

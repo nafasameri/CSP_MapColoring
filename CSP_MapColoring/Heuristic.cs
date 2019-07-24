@@ -6,8 +6,6 @@ namespace CSP_MapColoring
 {
     class Heuristic
     {
-        public Dictionary<int, Node> Graph { get; set; }
-
         /// <summary>
         /// Cancolor method
         /// checks if the color is acceptable
@@ -15,7 +13,7 @@ namespace CSP_MapColoring
         /// <param name="vertex">selected vertex</param>
         /// <param name="color">selected color</param>
         /// <returns>this color can be add to vertex?</returns>
-        public bool CanColor(int vertex, Color color)
+        public static bool CanColor(Dictionary<int, Node> Graph, int vertex, Color color)
         {
             foreach (int adjCountry in Graph[vertex].Neighbors)
                 if (Graph[adjCountry].color == color)
@@ -30,7 +28,7 @@ namespace CSP_MapColoring
         /// </summary>
         /// <param name="vertex"></param>
         /// <returns>degree vertex</returns>
-        public int GetDegree(int vertex)
+        public static int GetDegree(Dictionary<int, Node> Graph, int vertex)
         {
             //if (vertex == 0) return 0;
             //return NodeDegrees[vertex];
@@ -43,7 +41,7 @@ namespace CSP_MapColoring
         /// </summary>
         /// <param name="vertex">selected vertex</param>
         /// <returns>order asc degree of each vertex</returns>
-        public List<int> GetMRV(int vertex, int NumberOfColors)
+        public static List<int> GetMRV(Dictionary<int, Node> Graph, int vertex, int NumberOfColors)
         {
             Dictionary<int, int> mrvs = new Dictionary<int, int>();
 
@@ -69,7 +67,7 @@ namespace CSP_MapColoring
         /// <param name="vertex">selected vertex</param>
         /// <param name="colors">colors</param>
         /// <returns>select one color for this vertex</returns>
-        public Color GetLCV(int vertex, List<Color> colors)
+        public static Color GetLCV(Dictionary<int, Node> Graph, int vertex, List<Color> colors)
         {
             Dictionary<Color, object> lcvs = new Dictionary<Color, object>();
 
@@ -96,7 +94,7 @@ namespace CSP_MapColoring
         }
 
 
-        public List<Node> MRV(int NumberOfColors)
+        public static List<Node> MRV(Dictionary<int, Node> Graph, int NumberOfColors)
         {
             Dictionary<int, int> domains = new Dictionary<int, int>();
             foreach (var node in Graph.Values)
@@ -124,7 +122,7 @@ namespace CSP_MapColoring
             //return Graph.OrderBy(k => k.Value.domain.Count).Select(n => n.Value.Where(c => c == min)).ToList();
         }
 
-        public List<Node> Degree(List<Node> graph)
+        public static List<Node> Degree(Dictionary<int, Node> Graph, List<Node> graph)
         {
             int max = graph.Where(v => v.color == Color.Empty).Max(v => v.Neighbors.Count);
             return graph.Where(v => v.Neighbors.Count == max && v.color == Color.Empty).ToList();
